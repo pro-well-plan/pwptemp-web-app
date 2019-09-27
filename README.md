@@ -9,12 +9,28 @@ The application let you use the temperature model in your browser through pip in
 ## Get Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-* Users: head over to [coming soon]
-* Developers: Source code from github
+### Users
+Head over to [coming soon]
+### Developers
+Source code from github (Note that the developer version requires a Python 3 installation on your computer)
 
 ``` git clone https://github.com/pro-well-plan/WebVisual-for-pwptemp ```
 
-Note that the developer version requires a Python 3 installation on your computer.
+Then set environment variables:
+
+`set FLASK_APP=server.py` 
+
+Start the server with:
+
+`python -m flask run`
+
+Open up your browser as instructed.
+
+If you want to make changes to the code, open up your favorite browser (like [vscode](https://code.visualstudio.com/download)), and if you stop your server, and set another environment variable:
+
+`set FLASK_DEBUG=1`
+
+you'll get updates in your browser every time you change your code, after you restart your server with `python -m flask run` again.
 
 ## History
 Pwptemp was initially written and is maintained by Pro Well Plan AS as a free, simple, easy-to-use way of getting temperature data that can be tailored to our needs, and as contribution to the free software community.
