@@ -5,9 +5,9 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import matplotlib.pyplot as plt
 # from matplotlib.figure import Figure
 
-
+from Graph import create_plot, create_temp_time_plot
 import pwptemp
-from pwptemp.main import temp_time
+from pwptemp.main import temp_time, stab_time
 deltaz =50
 target_depth = 4000
 tdata = pwptemp.input.tdict(deltaz)
@@ -20,7 +20,7 @@ app.secret_key = b'\xba\x1d\x88\x98\xa0\x06\xce\x98g\x1d\xd4s\x81\x92@\xc6'
 @app.route('/', methods=['GET', 'POST'])
 def show_temp_plot():
     """
-    Renders template which calls for figure
+    Renders template which calls for figures
     """
     if request.method == 'POST':
             steps=request.form['timesteps']
@@ -36,8 +36,7 @@ def depth_profile():
     """
     Creates figure and returns to template
     """
-    fig = plot_depth_profile()
-    return return_figure(fig)
+    return return_figure(plot_depth_profile())
 
 
 @app.route('/stab_plot.png')
@@ -45,42 +44,46 @@ def time_profile():
     """
     Creates the temperature vs time plot
     """
-    well, md, tvd, deltaz, zstep = create_default_well()
     
-    Tdsi, Ta, Tr, Tcsg, Tsr, Tfm, time = pwptemp.main.temp_time(5, well, tvd, deltaz, zstep)
-    
-    finaltime, Tbot, Tout = stab_time(well, tvd, deltaz, zstep)
+    return return_figure(plot_time_profile())
 
+def plot_time_profile():
+    well= create_default_well()
+    s_t = stab_time(well)
     fig = plt.figure(dpi=150)
     axis=fig.add_subplot(1,1,1)
-    
-    create_temp_time_plot(axis,finaltime,Tbot,Tout,Tfm)
-    return return_figure(fig)
+
+    create_temp_time_plot(axis,s_t)
+    axis.set_ylim(axis.get_ylim()[::-1])  # reversing y axis
+    axis.legend()
+    return fig
+
 
 def plot_depth_profile():
     """
     Loads dataset and create Matplotlib figure using create_ax from Graph library
     """
-    well, md, tvd, deltaz, zstep = create_default_well()
+    well= create_default_well()
     res = []
     for time in session['timesteps']:
-        temp_distribution = pwptemp.main.temp_time(circulation_time, well)
+        temp_distribution = pwptemp.main.temp_time(time, well)
         res.append(temp_distribution)
 
     fig = plt.figure(dpi=150)
     axis=fig.add_subplot(1,1,1)
 
-    for step in res:
-        create_plot(axis, step,well)
+    for temp_dist in res:
+        create_plot(axis,temp_dist,well)
     axis.set_ylim(axis.get_ylim()[::-1])  # reversing y axis
     axis.legend()
     return fig
 
 def create_default_well():
-    # tdata=temp_dict 
-    well = pwptemp.input.set_well(tdata, depths)
+    """
+    Initiate and return well instance from tdata and dephts
+    """
+    return pwptemp.input.set_well(tdata, depths)
 
-    return well 
 
 def return_figure(fig):
     output = io.BytesIO()
