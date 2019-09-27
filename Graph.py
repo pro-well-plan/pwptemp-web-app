@@ -13,6 +13,9 @@ def create_plot(ax, temp_distribution, well):
 
 
 def create_temp_time_plot(ax, stab_data):
+    """
+    Returns the temperature plot on an axis
+    """
 
     # Plotting Tbottom and Tout through time
     ax.plot(range(stab_data.finaltime), stab_data.tbot, 'b', label='Bottom')  # Temp. inside Annulus vs Time

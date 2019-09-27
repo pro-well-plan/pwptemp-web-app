@@ -5,9 +5,10 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import matplotlib.pyplot as plt
 # from matplotlib.figure import Figure
 
-from Graph import create_plot, create_temp_time_plot
+from graph import create_plot, create_temp_time_plot
 import pwptemp
 from pwptemp.main import temp_time, stab_time
+
 deltaz =50
 target_depth = 4000
 tdata = pwptemp.input.tdict(deltaz)
