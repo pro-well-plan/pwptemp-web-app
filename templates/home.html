@@ -1,10 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-     <h1>pwptemp web app</h1>
+<img src="https://user-images.githubusercontent.com/52009346/70005631-98a6b400-156a-11ea-8097-8c2f1bdefacc.png"
+                style="width:1000px;height:100px;"><br><br>
+
      <p>pwptemp is a small LGPL licensed library for easy calculation of the temperature distribution along the well.</p>
-     <p><a href="https://github.com/pro-well-plan/pwptemp">pwptemp - Github</a></p>
      <p><a href="https://github.com/pro-well-plan/pwptemp-web-app">pwptemp web app - Github</a></p>
+     <p><a href="https://github.com/pro-well-plan/pwptemp">pwptemp - Github</a></p>
      <p><a href="https://pypi.org/project/pwptemp">pwptemp - PyPI</a></p>
 
 <div class="container">
@@ -14,35 +16,46 @@
       <h1>Inputs</h1>
       <hr>
 
-      <form action="/profile" method="POST">
+      <form action="/plot.png" method="POST" target="_blank">
 
         <div class="form-group">
           <label>Circulation Time (h)</label>
-          <input type="text" id="time" name="time" placeholder="Time">
+          <input type="text" id="time" name="time" value="5">
         </div>
 
         <div class="form-group">
           <label>Total Depth (m)</label>
-          <input type="text" id="depth" name="depth" placeholder="Depth">
+          <input type="text" id="depth" name="depth" placeholder="Depth" value="3000">
         </div>
 
         <div class="form-group">
           <label>Water Depth (m)</label>
-          <input type="text" id="wd" name="wd" placeholder="Water depth">
+          <input type="text" id="wd" name="wd" placeholder="Water depth" value="150">
         </div>
 
         <div class="form-group">
           <label>Well Profile </label><br>
-          <input type="radio" name="well_profile" value="V" checked> Vertical<br>
-          <input type="radio" name="well_profile" value="J"> J-type<br>
-          <input type="radio" name="well_profile" value="S"> S-type<br><br>
-          <input type="text" id="kop" name="kop" placeholder="kop">
-          <input type="text" id="eob" name="eob" placeholder="eob">
-          <input type="text" id="build_angle" name="build_angle" placeholder="build angle">
-          <input type="text" id="kop2" name="kop2" placeholder="kop2">
-          <input type="text" id="eob2" name="eob2" placeholder="eob2">
-          <input type="text" id="sod" name="sod" placeholder="sod">
-          <input type="text" id="eod" name="eod" placeholder="eod">
+          <input type="radio" name="well_profile" value="V" checked> Vertical
+          <input type="radio" name="well_profile" value="J"> J-type
+          <input type="radio" name="well_profile" value="S"> S-type
+          <input type="radio" name="well_profile" value="H1"> Horizontal single-curve
+          <input type="radio" name="well_profile" value="H2"> Horizontal double-curve<br><br>
+          kick-off point (kop): <input type="text" id="kop" name="kop" value="0">
+          end of build (eob): <input type="text" id="eob" name="eob" value="0">
+          build angle: <input type="text" id="build_angle" name="build_angle" value="1"><br><br>
+          kick-off point 2 (kop2): <input type="text" id="kop2" name="kop2" value="0">
+          end of build 2 (eob2): <input type="text" id="eob2" name="eob2" value="0"><br><br>
+          start of drop (sod): <input type="text" id="sod" name="sod" value="0">
+          end of drop (eod): <input type="text" id="eod" name="eod" value="0">
+        </div>
+
+        <div class="form-group">
+          <label>Type of Plot </label><br>
+          <input type="radio" name="plot_type" value="1" checked> Temperature Distribution <br>
+          <input type="radio" name="plot_type" value="2"> Effect on temperature calculation
+          @ md[0(surface)-1(bottom)]: <input type="text" id="plot_md" name="plot_md" value="1"> <br>
+          <input type="radio" name="plot_type" value="3"> Effect on Heat Source Terms
+
         </div>
 
         <button type="submit" class="btn btn-primary">Run</button>
