@@ -12,6 +12,16 @@ def home():
     return render_template("home.html")
 
 
+@app.route("/drilling")
+def drilling():
+    return render_template("drilling.html")
+
+
+@app.route("/contributors")
+def contributors():
+    return render_template("contributors.html")
+
+
 @app.route("/plot.png", methods=["GET", "POST"])
 def plot_png():
     if request.method == "POST":
