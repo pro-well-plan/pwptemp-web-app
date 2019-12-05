@@ -1,14 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div style="text-align: center;">
+<div class="container" style="text-align: center;">
 <img src="https://user-images.githubusercontent.com/52009346/70005631-98a6b400-156a-11ea-8097-8c2f1bdefacc.png"
-                style="width:1140px;height:100px;"><br><br>
+                style="width:100%;height:100px;"><br><br>
 </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col">
+<div class="container" style="text-align: left;">
 
       <h1>pwptemp for drilling</h1>
       <hr>
@@ -32,37 +30,95 @@
           <input type="text" id="wd" name="wd" placeholder="Water depth" value="150">
         </div>
 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        .collapsible {
+          background-color: #777;
+          color: white;
+          cursor: pointer;
+          padding: 12px;
+          width: 100%;
+          border: 1px solid #ccc;
+          text-align: left;
+          outline: none;
+        }
+
+        .active, .collapsible:hover {
+          background-color: #555;
+        }
+
+        .collapsible:after {
+          content: '\002B';
+          color: white;
+          font-weight: bold;
+          float: right;
+          margin-left: 5px;
+        }
+
+        .active:after {
+          content: "\2212";
+        }
+
+        .content {
+          padding: 0 18px;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.2s ease-out;
+          background-color: #f1f1f1;
+          border: 1px solid #ccc
+        }
+        </style>
+
         <div class="form-group">
-          <label>Well Profile </label><br>
-          <input type="radio" name="well_profile" value="V" checked> Vertical
-          <input type="radio" name="well_profile" value="J"> J-type
-          <input type="radio" name="well_profile" value="S"> S-type
-          <input type="radio" name="well_profile" value="H1"> Horizontal single-curve
-          <input type="radio" name="well_profile" value="H2"> Horizontal double-curve<br><br>
-          kick-off point (kop): <input type="text" id="kop" name="kop" value="600">
-          end of build (eob): <input type="text" id="eob" name="eob" value="1500">
-          build angle: <input type="text" id="build_angle" name="build_angle" value="40"><br><br>
-          kick-off point 2 (kop2): <input type="text" id="kop2" name="kop2" value="1800">
-          end of build 2 (eob2): <input type="text" id="eob2" name="eob2" value="2300"><br><br>
-          start of drop (sod): <input type="text" id="sod" name="sod" value="2000">
-          end of drop (eod): <input type="text" id="eod" name="eod" value="2600">
+          <button type ="button" class="collapsible">Well Profile</button>
+          <div class="content">
+              <br><input type="radio" name="well_profile" value="V" checked> Vertical &nbsp;&nbsp;
+              <input type="radio" name="well_profile" value="J"> J-type &nbsp;&nbsp;
+              <input type="radio" name="well_profile" value="S"> S-type &nbsp;&nbsp;
+              <input type="radio" name="well_profile" value="H1"> Horizontal single-curve &nbsp;&nbsp;
+              <input type="radio" name="well_profile" value="H2"> Horizontal double-curve<br><br>
+              kick-off point (kop): <input type="text" id="kop" name="kop" value="600">
+              end of build (eob): <input type="text" id="eob" name="eob" value="1500">
+              build angle: <input type="text" id="build_angle" name="build_angle" value="40"><br><br>
+              kick-off point 2 (kop2): <input type="text" id="kop2" name="kop2" value="1800">
+              end of build 2 (eob2): <input type="text" id="eob2" name="eob2" value="2300"><br><br>
+              start of drop (sod): <input type="text" id="sod" name="sod" value="2000">
+              end of drop (eod): <input type="text" id="eod" name="eod" value="2600"> <br><br>
+          </div>
         </div>
 
         <div class="form-group">
-          <label>Type of Plot </label><br>
-          <input type="radio" name="plot_type" value="1" checked> Temperature Distribution <br>
-          <input type="radio" name="plot_type" value="2"> Effect on temperature calculation
-          @ md[0(surface)-1(bottom)]: <input type="text" id="plot_md" name="plot_md" value="1"> <br>
-          <input type="radio" name="plot_type" value="3"> Effect on Heat Source Terms
-
+          <button type ="button" class="collapsible">Type of Plot</button>
+          <div class="content">
+            <br><input type="radio" name="plot_type" value="1" checked> Temperature Distribution <br>
+            <input type="radio" name="plot_type" value="2"> Effect on temperature calculation
+            at md: <input type="text" id="plot_md" name="plot_md" value="1"> from 0 (surface) to 1 (bottom) <br>
+            <input type="radio" name="plot_type" value="3"> Effect on Heat Source Terms <br>
+            <input type="radio" name="plot_type" value="4"> Temperature Behavior <br><br>
+          </div>
         </div>
 
-        <button type="submit" class="btn btn-primary">Run</button>
+        <script>
+              var coll = document.getElementsByClassName("collapsible");
+              var i;
+
+              for (i = 0; i < coll.length; i++) {
+                coll[i].addEventListener("click", function() {
+                  this.classList.toggle("active");
+                  var content = this.nextElementSibling;
+                  if (content.style.maxHeight){
+                    content.style.maxHeight = null;
+                  } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                  }
+                });
+              }
+          </script>
+
+        <button type="submit" class="btn btn-primary">Run</button> <br><br>
 
       </form>
 
-    </div>
-  </div>
 </div>
 
 {% endblock %}

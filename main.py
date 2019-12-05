@@ -49,6 +49,9 @@ def plot_png():
         fig = create_figure2(temp, plot_md)
     if plot_type == 3:
         fig = create_figure3(temp)
+    if plot_type == 4:
+        stab_data = temp.stab()
+        fig = create_figure4(stab_data)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     return Response(output.getvalue(), mimetype='image/png')
@@ -113,6 +116,21 @@ def create_figure3(temp):
     ax.legend(loc=0, labels=['%s, %1.2f %%' % (l, s) for l, s in zip(labels, effects)])
     title = 'Effect of factors in heat source terms. Qp/Qa = %1.2f' % effect.hsr
     ax.set_title(title)
+    return fig
+
+
+def create_figure4(stab_data):
+    fig = Figure()
+    ax = fig.add_subplot(1, 1, 1)
+    ax.plot(range(stab_data.finaltime), stab_data.tbot, 'b', label='Bottom')  # Temp. inside Annulus vs Time
+    ax.plot(range(stab_data.finaltime), stab_data.tout, 'r', label='Outlet (Annular)')  # Temp. inside Annulus vs Time
+    ax.axhline(y=stab_data.tfm[-1], color='k', label='Formation')  # Formation Temp. vs Time
+    ax.set_xlim(0, stab_data.finaltime - 1)
+    ax.set_xlabel('Time, h')
+    ax.set_ylabel('Temperature, °C')
+    title = 'Temperature behavior before stabilization (%1.1f hours)' % stab_data.finaltime
+    ax.set_title(title)
+    ax.legend()  # applying the legend
     return fig
 
 if __name__ == "__main__":
