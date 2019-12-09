@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, Response
+from flask import Flask, render_template, request, flash
 import pwptemp.drilling as ptd
-import io
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
+from bokeh.plotting import figure, output_file
+from bokeh.embed import components
+from bokeh.resources import INLINE
+from bokeh.util.string import encode_utf8
 
 app = Flask(__name__)
+app.secret_key = 'random secret'
 
 
 @app.route("/")
@@ -12,36 +14,147 @@ def home():
     return render_template("home.html")
 
 
-@app.route("/drilling")
-def drilling():
-    return render_template("drilling.html")
-
-
 @app.route("/contributors")
 def contributors():
     return render_template("contributors.html")
 
 
-@app.route("/plot.png", methods=["GET", "POST"])
-def plot_png():
-    if request.method == "POST":
-        time = int(request.form.get("time"))
-        depth = int(request.form.get("depth"))
-        wd = int(request.form.get("wd"))
-        well_profile = str(request.form.get("well_profile"))
-        kop = int(request.form.get("kop"))
-        eob = int(request.form.get("eob"))
-        build_angle = int(request.form.get("build_angle"))
-        kop2 = int(request.form.get("kop2"))
-        eob2 = int(request.form.get("eob2"))
-        sod = int(request.form.get("sod"))
-        eod = int(request.form.get("eod"))
+@app.route("/drilling")
+def drilling():
+    p, inputs = plot()
 
-        temp = ptd.temp(time, mdt=depth, profile=well_profile, change_input={'wd': wd}, build_angle=build_angle,
-                     kop=kop, eob=eob, kop2=kop2, eob2=eob2, sod=sod, eod=eod)
+    # grab the static resources
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
 
-        plot_type = int(request.form.get("plot_type"))
-        plot_md = int(request.form.get("plot_md"))
+    # Embed plot into HTML via Flask Render
+    script, div = components(p)
+    html = render_template('drilling.html', plot_script=script, plot_div=div, js_resources=js_resources,
+                           css_resources=css_resources, time=inputs['time'], depth=inputs['depth'], wd=inputs['wd'],
+                           kop=inputs['kop'], eob=inputs['eob'], build_angle=inputs['build_angle'], kop2=inputs['kop2'],
+                           eob2=inputs['eob2'], sod=inputs['sod'], eod=inputs['eod'], tin=inputs['tin'], q=inputs['q'],
+                           rpm=inputs['rpm'], t=inputs['t'], tbit=inputs['tbit'], wob=inputs['wob'], rop=inputs['rop'],
+                           an=inputs['an'], rhol=inputs['rhol'], rhod=inputs['rhod'], rhoc=inputs['rhoc'],
+                           rhor=inputs['rhor'], rhofm=inputs['rhofm'], rhow=inputs['rhow'], rhocem=inputs['rhocem'])
+
+    return encode_utf8(html)
+
+
+def plot():
+    time = request.args.get("time")
+    depth = request.args.get("depth")
+    wd = request.args.get("wd")
+    well_profile = request.args.get("well_profile")
+    kop = request.args.get("kop")
+    eob = request.args.get("eob")
+    build_angle = request.args.get("build_angle")
+    kop2 = request.args.get("kop2")
+    eob2 = request.args.get("eob2")
+    sod = request.args.get("sod")
+    eod = request.args.get("eod")
+    plot_type = request.args.get("plot_type")
+    plot_md = request.args.get("plot_md")
+
+    # OPERATIONAL PARAMETERS
+    tin = request.args.get("tin")
+    q = request.args.get("q")
+    rpm = request.args.get("rpm")
+    t = request.args.get("t")
+    tbit = request.args.get("tbit")
+    wob = request.args.get("wob")
+    rop = request.args.get("rop")
+    an = request.args.get("an")
+
+    # DENSITIES
+    rhol = request.args.get("rhol")
+    rhod = request.args.get("rhod")
+    rhoc = request.args.get("rhoc")
+    rhor = request.args.get("rhor")
+    rhofm = request.args.get("rhofm")
+    rhow = request.args.get("rhow")
+    rhocem = request.args.get("rhocem")
+
+    if time is None:
+        time = 5
+        depth = 3000
+        wd = 150
+        well_profile = "V"
+        kop = 600
+        eob = 1500
+        build_angle = 40
+        kop2 = 1800
+        eob2 = 2300
+        sod = 2000
+        eod = 2600
+        plot_type = 1
+        plot_md = 1
+
+        # OPERATIONAL PARAMETERS
+        tin = 20
+        q = 47.696
+        rpm = 100
+        t = 2
+        tbit = 1.35
+        wob = 22.41
+        rop = 14.4
+        an = 2
+
+        # DENSITIES
+        rhol = 1198
+        rhod = 7600
+        rhoc = 7800
+        rhor = 7800
+        rhofm = 2245
+        rhow = 1029
+        rhocem = 2700
+
+    else:
+        time = float(time)
+        depth = float(depth)
+        wd = float(wd)
+        well_profile = str(well_profile)
+        kop = float(kop)
+        eob = float(eob)
+        build_angle = int(build_angle)
+        kop2 = float(kop2)
+        eob2 = float(eob2)
+        sod = float(sod)
+        eod = float(eod)
+        plot_type = int(plot_type)
+        plot_md = int(plot_md)
+
+        # OPERATIONAL PARAMETERS
+        tin = float(tin)
+        q = float(q)
+        rpm = float(rpm)
+        t = float(t)
+        tbit = float(tbit)
+        wob = float(wob)
+        rop = float(rop)
+        an = float(an)
+
+        # DENSITIES
+        rhol = float(rhol)
+        rhod = float(rhod)
+        rhoc = float(rhoc)
+        rhor = float(rhor)
+        rhofm = float(rhofm)
+        rhow = float(rhow)
+        rhocem = float(rhocem)
+
+    inputs = {'time':time, 'depth':depth, 'wd':wd, 'well_profile':well_profile, 'kop':kop, 'eob':eob,
+              'build_angle':build_angle, 'kop2':kop2, 'eob2':eob2, 'sod':sod, 'eod':eod, 'plot_type':plot_type,
+              'plot_md':plot_md}
+
+    others = {'wd':wd, 'tin':tin, 'q':q, 'rpm':rpm, 't':t, 'tbit':tbit, 'wob':wob, 'rop':rop, 'an':an, 'rhol':rhol,
+              'rhod':rhod, 'rhoc':rhoc, 'rhor':rhor, 'rhofm':rhofm, 'rhow':rhow, 'rhocem':rhocem}
+
+    inputs.update(others)  # Merge 'others' into the 'inputs' dictionary
+
+    error_messages(inputs)  # Checking process for warning messages depending on the inputs
+
+    temp = ptd.temp(time, mdt=depth, profile=well_profile, change_input=others, build_angle=build_angle,
+                    kop=kop, eob=eob, kop2=kop2, eob2=eob2, sod=sod, eod=eod)
 
     if plot_type == 1:
         fig = create_figure1(temp)
@@ -50,88 +163,108 @@ def plot_png():
     if plot_type == 3:
         fig = create_figure3(temp)
     if plot_type == 4:
-        stab_data = temp.stab()
-        fig = create_figure4(stab_data)
-    output = io.BytesIO()
-    FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')
+        fig = create_figure4(temp.stab())
+    return fig, inputs
 
 
 def create_figure1(temp, sr=False):
-    fig = Figure()
-    ax = fig.add_subplot(1, 1, 1)
+    p = figure(plot_width=800, plot_height=600)
     md = temp.md
     riser = temp.riser
+    tr = [i for i in temp.tr if i]
     csg = temp.csgs_reach
-    ax.plot(temp.tdsi, md, c='r', label='Fluid in Drill String')  # Temp. inside Drillpipe vs Depth
-    ax.plot(temp.ta, md, 'b', label='Fluid in Annulus')
+    p.line(temp.tdsi, md, line_color='red', legend_label='Fluid in Drill String')  # Temp. inside Drillpipe vs Depth
+    p.line(temp.ta, md, line_color='blue', legend_label='Fluid in Annulus')
     if riser > 0:
-        ax.plot(temp.tr, md, 'g', label='Riser')  # Temp. due to gradient vs Depth
+        p.line(tr, md, line_color='green', legend_label='Riser')  # Temp. due to gradient vs Depth
     if csg > 0:
-        ax.plot(temp.tcsg, md, 'c', label='Casing')  # Temp. due to gradient vs Depth
-    ax.plot(temp.tfm, md, color='k', label='Formation')  # Temp. due to gradient vs Depth
+        p.line(temp.tcsg, md, line_color='orange', legend_label='Casing')  # Temp. due to gradient vs Depth
+    p.line(temp.tfm, md, line_color='darkred', legend_label='Formation')  # Temp. due to gradient vs Depth
     if sr:
         # Temp. due to gradient vs Depth
-        ax.plot(temp.tsr, md, c='0.6', ls='-', marker='', label='Surrounding Space')
-    ax.set_xlabel('Temperature, °C')
-    ax.set_ylabel('Depth, m')
-    title = 'Temperature Profile at %1.1f hours' % temp.time
-    ax.set_title(title)
-    ax.invert_yaxis()  # reversing y axis
-    ax.legend()  # applying the legend
-    return fig
+        p.line(temp.tsr, md, line_color='salmon', ls='-', marker='', legend_label='Surrounding Space')
+
+    p.xaxis.axis_label = 'Temperature, °C'
+    p.yaxis.axis_label = 'Depth, m'
+    p.title.text = 'Temperature Profile at %1.1f hours' % temp.time
+    p.y_range.flipped = True  # reversing y axis
+    return p
 
 
-def create_figure2(temp, md):
-    fig = Figure()
-    ax = fig.add_subplot(1, 1, 1)
-    effect = temp.effect(md_length=md)
-    values = [effect.t2, abs(effect.cc), effect.hs, effect.t1]
-    bars = ['Tf: %1.2f°C' % effect.t2, 'Convection and Conduction: %1.2f°C' % effect.cc, 'Heat Source Term: %1.2f°C'
-            % effect.hs, 'To: %1.2f°C' % effect.t1]
-    position = range(4)
-    ax.barh(position, values, color=['blue', 'red', 'green', 'blue'])
-    if effect.t1 > effect.t2:
-        ax.barh(0, abs(effect.cc + effect.hs), color='red', left=effect.t2)
-        ax.text(effect.t2, 0, '%1.2f°C' % (effect.cc + effect.hs))
-    else:
-        ax.barh(0, abs(effect.cc + effect.hs), color='green', left=effect.t1)
-        ax.text(effect.t1, 0, '%1.2f°C' % (effect.cc + effect.hs))
-    ax.set_yticks(position, ['Tf', 'CC', 'HS', 'To'])
-    ax.set_title('Temperature contribution of main factors at %1.1fh - %1.1fm' % (effect.time, effect.length),
-              fontweight='bold')
-    for i, v in enumerate(values):
-        ax.text(v / 8, i, bars[i])
-    ax.set_xlabel('Temperature, °C')
-    return fig
+def create_figure2(temp, plot_md):
+    effect = temp.effect(md_length=plot_md)
+    values = [effect.cc, effect.hs, effect.cc+effect.hs]
+    output_file("bars.html")
+    labels = ['Convection and Conduction', 'Heat Source Term', 'Effective Change']
+    title = 'Temperature contribution of main factors at %1.1fh - %1.1fm' % (effect.time, effect.length)
+    p = figure(x_range=labels, plot_height=600, plot_width=800, title=title)
+    p.yaxis.axis_label = 'Temperature, °C'
+    p.vbar(x=labels, top=values, width=0.5)
+    return p
 
 
 def create_figure3(temp):
-    fig = Figure()
-    ax = fig.add_subplot(1, 1, 1)
+    hs = temp.effect().hs
     effect = temp.well().effect()
+    values = [effect.ds_rot1 * hs, effect.fric1 * hs, effect.ds_rot2 * hs, effect.fric2 * hs]
+    output_file("bars.html")
     labels = ['pipe rotation in Qp', 'friction in Qp', 'pipe rotation in Qa', 'friction in Qa']
-    effects = [effect.ds_rot1, effect.fric1, effect.ds_rot2, effect.fric2]
-    ax.pie(effects, startangle=90)
-    ax.legend(loc=0, labels=['%s, %1.2f %%' % (l, s) for l, s in zip(labels, effects)])
     title = 'Effect of factors in heat source terms. Qp/Qa = %1.2f' % effect.hsr
-    ax.set_title(title)
-    return fig
+    p = figure(x_range=labels, plot_height=600, plot_width=800, title=title)
+    p.yaxis.axis_label = 'Temperature, °C'
+    p.vbar(x=labels, top=values, width=0.5)
+    return p
 
 
 def create_figure4(stab_data):
-    fig = Figure()
-    ax = fig.add_subplot(1, 1, 1)
-    ax.plot(range(stab_data.finaltime), stab_data.tbot, 'b', label='Bottom')  # Temp. inside Annulus vs Time
-    ax.plot(range(stab_data.finaltime), stab_data.tout, 'r', label='Outlet (Annular)')  # Temp. inside Annulus vs Time
-    ax.axhline(y=stab_data.tfm[-1], color='k', label='Formation')  # Formation Temp. vs Time
-    ax.set_xlim(0, stab_data.finaltime - 1)
-    ax.set_xlabel('Time, h')
-    ax.set_ylabel('Temperature, °C')
-    title = 'Temperature behavior before stabilization (%1.1f hours)' % stab_data.finaltime
-    ax.set_title(title)
-    ax.legend()  # applying the legend
-    return fig
+    p = figure(plot_width=800, plot_height=600)
+    p.line(range(stab_data.finaltime), stab_data.tbot, line_color='blue', legend_label='Bottom')  # Temp. inside Annulus vs Time
+    p.line(range(stab_data.finaltime), stab_data.tout, line_color='red', legend_label='Outlet (Annular)')  # Temp. inside Annulus vs Time
+    p.line(range(stab_data.finaltime), [stab_data.tfm[-1]] * len(stab_data.tbot), line_color='black', legend_label='Formation')  # Formation Temp. vs Time
+    p.xaxis.axis_label = 'Time, h'
+    p.yaxis.axis_label = 'Temperature, °C'
+    p.title.text = 'Temperature behavior before stabilization (%1.1f hours)' % stab_data.finaltime
+    return p
+
+
+def error_messages(inputs):
+
+    if inputs['wd'] > inputs['depth']:
+        flash('water depth is higher than the total depth', 'danger')
+
+    if inputs['well_profile'] == "J" or inputs['well_profile'] == "H1":
+
+        if inputs['kop'] > inputs['depth']:
+            flash('kop is higher than the total depth', 'danger')
+
+        if inputs['eob'] > inputs['depth']:
+            flash('eob is higher than the total depth', 'danger')
+
+        if inputs['eob'] < inputs['kop']:
+            flash('eob must be deeper than kop', 'danger')
+
+    if inputs['well_profile'] == "S":
+
+        if inputs['sod'] > inputs['depth']:
+            flash('sod is higher than the total depth', 'danger')
+
+        if inputs['eod'] > inputs['depth']:
+            flash('eod is higher than the total depth', 'danger')
+
+        if inputs['eod'] < inputs['sod']:
+            flash('eob2 must be deeper than kop2', 'danger')
+
+    if inputs['well_profile'] == "H2":
+
+        if inputs['kop2'] > inputs['depth']:
+            flash('kop2 is higher than the total depth', 'danger')
+
+        if inputs['eob2'] > inputs['depth']:
+            flash('eob2 is higher than the total depth', 'danger')
+
+        if inputs['eob2'] < inputs['kop2']:
+            flash('eob2 must be deeper than kop2', 'danger')
+
 
 if __name__ == "__main__":
     app.run(debug=True)

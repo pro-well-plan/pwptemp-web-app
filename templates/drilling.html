@@ -1,124 +1,168 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<div class="container" style="text-align: center;">
-<img src="https://user-images.githubusercontent.com/52009346/70005631-98a6b400-156a-11ea-8097-8c2f1bdefacc.png"
-                style="width:100%;height:100px;"><br><br>
-</div>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    {{ js_resources|indent(4)|safe }}
+    {{ css_resources|indent(4)|safe }}
+    {{ plot_script|indent(4)|safe }}
+</head>
 
-<div class="container" style="text-align: left;">
+<body>
 
-      <h1>pwptemp for drilling</h1>
-      <hr>
-      <p>In this section you can generate the well temperature distribution for a drilling operation. Set the inputs
-        and click the 'Run' button</p>
+    <div class="container" style="text-align: center;">
+    <img src="https://user-images.githubusercontent.com/52009346/70005631-98a6b400-156a-11ea-8097-8c2f1bdefacc.png"
+                    style="width:100%;height:100px;"><br><br>
+    </div>
 
-      <form action="/plot.png" method="POST" target="_blank">
+    <div class="container" style="text-align: left;">
 
-        <div class="form-group">
-          <label>Circulation Time (h)</label>
-          <input type="text" id="time" name="time" value="5">
-        </div>
+          <h1>pwptemp for drilling</h1>
+          <hr>
+          <p>In this section you can generate the well temperature distribution for a drilling operation. Set the inputs
+            and click the 'Run' button</p>
 
-        <div class="form-group">
-          <label>Total Depth (m)</label>
-          <input type="text" id="depth" name="depth" placeholder="Depth" value="3000">
-        </div>
+          <form action="/drilling">
 
-        <div class="form-group">
-          <label>Water Depth (m)</label>
-          <input type="text" id="wd" name="wd" placeholder="Water depth" value="150">
-        </div>
+            <div class="form-group">
+              <label>Circulation Time (h)</label>
+              <input type="text" id="time" name="time" value="{{ time|safe }}">
+            </div>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-        .collapsible {
-          background-color: #777;
-          color: white;
-          cursor: pointer;
-          padding: 12px;
-          width: 100%;
-          border: 1px solid #ccc;
-          text-align: left;
-          outline: none;
-        }
+            <div class="form-group">
+              <label>Total Depth (m)</label>
+              <input type="text" id="depth" name="depth" placeholder="Depth" value="{{ depth|safe }}">
+            </div>
 
-        .active, .collapsible:hover {
-          background-color: #555;
-        }
+            <div class="form-group">
+              <label>Water Depth (m)</label>
+              <input type="text" id="wd" name="wd" placeholder="Water depth" value="{{ wd|safe }}">
+            </div>
 
-        .collapsible:after {
-          content: '\002B';
-          color: white;
-          font-weight: bold;
-          float: right;
-          margin-left: 5px;
-        }
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+            .collapsible {
+              background-color: #777;
+              color: white;
+              cursor: pointer;
+              padding: 12px;
+              width: 100%;
+              border: 1px solid #ccc;
+              text-align: left;
+              outline: none;
+            }
 
-        .active:after {
-          content: "\2212";
-        }
+            .active, .collapsible:hover {
+              background-color: #555;
+            }
 
-        .content {
-          padding: 0 18px;
-          max-height: 0;
-          overflow: hidden;
-          transition: max-height 0.2s ease-out;
-          background-color: #f1f1f1;
-          border: 1px solid #ccc
-        }
-        </style>
+            .collapsible:after {
+              content: '\002B';
+              color: white;
+              font-weight: bold;
+              float: right;
+              margin-left: 5px;
+            }
 
-        <div class="form-group">
-          <button type ="button" class="collapsible">Well Profile</button>
-          <div class="content">
-              <br><input type="radio" name="well_profile" value="V" checked> Vertical &nbsp;&nbsp;
-              <input type="radio" name="well_profile" value="J"> J-type &nbsp;&nbsp;
-              <input type="radio" name="well_profile" value="S"> S-type &nbsp;&nbsp;
-              <input type="radio" name="well_profile" value="H1"> Horizontal single-curve &nbsp;&nbsp;
-              <input type="radio" name="well_profile" value="H2"> Horizontal double-curve<br><br>
-              kick-off point (kop): <input type="text" id="kop" name="kop" value="600">
-              end of build (eob): <input type="text" id="eob" name="eob" value="1500">
-              build angle: <input type="text" id="build_angle" name="build_angle" value="40"><br><br>
-              kick-off point 2 (kop2): <input type="text" id="kop2" name="kop2" value="1800">
-              end of build 2 (eob2): <input type="text" id="eob2" name="eob2" value="2300"><br><br>
-              start of drop (sod): <input type="text" id="sod" name="sod" value="2000">
-              end of drop (eod): <input type="text" id="eod" name="eod" value="2600"> <br><br>
-          </div>
-        </div>
+            .active:after {
+              content: "\2212";
+            }
 
-        <div class="form-group">
-          <button type ="button" class="collapsible">Type of Plot</button>
-          <div class="content">
-            <br><input type="radio" name="plot_type" value="1" checked> Temperature Distribution <br>
-            <input type="radio" name="plot_type" value="2"> Effect on temperature calculation
-            at md: <input type="text" id="plot_md" name="plot_md" value="1"> from 0 (surface) to 1 (bottom) <br>
-            <input type="radio" name="plot_type" value="3"> Effect on Heat Source Terms <br>
-            <input type="radio" name="plot_type" value="4"> Temperature Behavior <br><br>
-          </div>
-        </div>
+            .content {
+              padding: 0 18px;
+              max-height: 0;
+              overflow: hidden;
+              transition: max-height 0.2s ease-out;
+              background-color: #f1f1f1;
+              border: 1px solid #ccc
+            }
+            </style>
 
-        <script>
-              var coll = document.getElementsByClassName("collapsible");
-              var i;
+            <div class="form-group">
+              <button type ="button" class="collapsible">Well Profile</button>
+              <div class="content">
+                  <br><input type="radio" name="well_profile" value="V" checked> Vertical &nbsp;&nbsp;
+                  <input type="radio" name="well_profile" value="J"> J-type &nbsp;&nbsp;
+                  <input type="radio" name="well_profile" value="S"> S-type &nbsp;&nbsp;
+                  <input type="radio" name="well_profile" value="H1"> Horizontal single-curve &nbsp;&nbsp;
+                  <input type="radio" name="well_profile" value="H2"> Horizontal double-curve<br><br>
+                  kick-off point (kop, m): <input type="text" id="kop" name="kop" value="{{ kop|safe }}"> &nbsp;&nbsp;
+                  end of build (eob, m): <input type="text" id="eob" name="eob" value="{{ eob|safe }}"> <br><br>
+                  build angle (°): <input type="text" id="build_angle" name="build_angle" value="{{ build_angle|safe }}"><br><br>
+                  kick-off point 2 (kop2, m): <input type="text" id="kop2" name="kop2" value="{{ kop2|safe }}"> &nbsp;&nbsp;
+                  end of build 2 (eob2, m): <input type="text" id="eob2" name="eob2" value="{{ eob2|safe }}"><br><br>
+                  start of drop (sod, m): <input type="text" id="sod" name="sod" value="{{ sod|safe }}"> &nbsp;&nbsp;
+                  end of drop (eod, m): <input type="text" id="eod" name="eod" value="{{ eod|safe }}"> <br><br>
+              </div>
+            </div>
 
-              for (i = 0; i < coll.length; i++) {
-                coll[i].addEventListener("click", function() {
-                  this.classList.toggle("active");
-                  var content = this.nextElementSibling;
-                  if (content.style.maxHeight){
-                    content.style.maxHeight = null;
-                  } else {
-                    content.style.maxHeight = content.scrollHeight + "px";
+            <div class="form-group">
+              <button type ="button" class="collapsible">Operational Parameters</button>
+              <div class="content">
+                  <br>
+                  fluid inlet temperature (°C): <input type="text" id="tin" name="tin" value="{{ tin|safe }}"> &nbsp;&nbsp;
+                  circulation rate (m3/h): <input type="text" id="q" name="q" value="{{ q|safe }}"> <br><br>
+                  RPM: <input type="text" id="rpm" name="rpm" value="{{ rpm|safe }}"> &nbsp;&nbsp;
+                  torque on the drill string (kN*m): <input type="text" id="t" name="t" value="{{ t|safe }}"> <br><br>
+                  torque on the bit (kN*m): <input type="text" id="tbit" name="tbit" value="{{ tbit|safe }}"> &nbsp;&nbsp;
+                  weight on bit (kN): <input type="text" id="wob" name="wob" value="{{ wob|safe }}"> <br><br>
+                  ROP (m/h): <input type="text" id="rop" name="rop" value="{{ rop|safe }}"> &nbsp;&nbsp;
+                  area of the nozzles (m2): <input type="text" id="an" name="an" value="{{ an|safe }}"> <br><br>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button type ="button" class="collapsible">Densities</button>
+              <div class="content">
+                  <br>
+                  fluid density (kg/m3): <input type="text" id="rhol" name="rhol" value="{{ rhol|safe }}"> &nbsp;&nbsp;
+                  drill pipe density (kg/m3): <input type="text" id="rhod" name="rhod" value="{{ rhod|safe }}"> <br><br>
+                  casing density (kg/m3): <input type="text" id="rhoc" name="rhoc" value="{{ rhoc|safe }}"> &nbsp;&nbsp;
+                  riser density (kg/m3): <input type="text" id="rhor" name="rhor" value="{{ rhor|safe }}"> <br><br>
+                  formation density (kg/m3): <input type="text" id="rhofm" name="rhofm" value="{{ rhofm|safe }}"> &nbsp;&nbsp;
+                  seawater density (kg/m3): <input type="text" id="rhow" name="rhow" value="{{ rhow|safe }}"> <br><br>
+                  cement density (kg/m3): <input type="text" id="rhocem" name="rhocem" value="{{ rhocem|safe }}"> <br><br>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button type ="button" class="collapsible">Type of Plot</button>
+              <div class="content">
+                <br><input type="radio" name="plot_type" value="1" checked> Temperature Distribution <br>
+                <input type="radio" name="plot_type" value="2"> Effect on temperature calculation
+                at md: <input type="text" id="plot_md" name="plot_md" value="1"> from 0 (surface) to 1 (bottom) <br>
+                <input type="radio" name="plot_type" value="3"> Effect on Heat Source Terms <br>
+                <input type="radio" name="plot_type" value="4"> Temperature Behavior <br><br>
+              </div>
+            </div>
+
+            <script>
+                  var coll = document.getElementsByClassName("collapsible");
+                  var i;
+
+                  for (i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                      this.classList.toggle("active");
+                      var content = this.nextElementSibling;
+                      if (content.style.maxHeight){
+                        content.style.maxHeight = null;
+                      } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                      }
+                    });
                   }
-                });
-              }
-          </script>
+              </script>
+            <input type="submit" value="Run"> <br><br>
 
-        <button type="submit" class="btn btn-primary">Run</button> <br><br>
+          </form>
 
-      </form>
+    </div>
 
-</div>
+    <div class="container" style="align: center;">
+        {{ plot_div|indent(4)|safe }} <br><br>
+    </div>
+
+</body>
 
 {% endblock %}
