@@ -13,7 +13,7 @@
 
     <div class="container" style="text-align: center;">
     <img src="https://user-images.githubusercontent.com/52009346/70005631-98a6b400-156a-11ea-8097-8c2f1bdefacc.png"
-                    style="width:100%;height:100px;"><br><br>
+                    style="width:100%;height:15%;opacity:0.8"><br><br>
     </div>
 
     <div class="container" style="text-align: left;">
@@ -82,8 +82,8 @@
             <div class="form-group">
               <button type ="button" class="collapsible">Well Profile</button>
               <div class="content">
-                  <br><input type="radio" name="well_profile" value="V" checked> Vertical &nbsp;&nbsp;
-                  <input type="radio" name="well_profile" value="J"> J-type &nbsp;&nbsp;
+                  <br><input type="radio" name="well_profile" value="V"> Vertical &nbsp;&nbsp;
+                  <input type="radio" name="well_profile" value="J" checked> J-type &nbsp;&nbsp;
                   <input type="radio" name="well_profile" value="S"> S-type &nbsp;&nbsp;
                   <input type="radio" name="well_profile" value="H1"> Horizontal single-curve &nbsp;&nbsp;
                   <input type="radio" name="well_profile" value="H2"> Horizontal double-curve<br><br>
@@ -131,9 +131,17 @@
               <div class="content">
                 <br><input type="radio" name="plot_type" value="1" checked> Temperature Distribution <br>
                 <input type="radio" name="plot_type" value="2"> Effect on temperature calculation
-                at md: <input type="text" id="plot_md" name="plot_md" value="1"> from 0 (surface) to 1 (bottom) <br>
+                at md: <input type="text" id="plot_md" name="plot_md" value="{{ plot_md|safe }}"> from 0 (surface) to 1 (bottom) <br>
                 <input type="radio" name="plot_type" value="3"> Effect on Heat Source Terms <br>
-                <input type="radio" name="plot_type" value="4"> Temperature Behavior <br><br>
+                <input type="radio" name="plot_type" value="4"> Temperature Behavior <br>
+                <input type="radio" name="plot_type" value="5"> T. Distributions
+                each: <input type="text" id="deltat" name="deltat" value="{{ deltat|safe }}"> hours <br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tdsi" value="True" checked> Fluid inside the drill string<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_ta" value="True"> Fluid inside the annulus<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tr" value="True"> Riser wall<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tcsg" value="True"> Casing wall<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tfm" value="True" checked> Formation (Initial)<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tsr" value="True"> Surrounding Space<br><br>
               </div>
             </div>
 
@@ -157,10 +165,8 @@
 
           </form>
 
-    </div>
-
-    <div class="container" style="align: center;">
         {{ plot_div|indent(4)|safe }} <br><br>
+
     </div>
 
 </body>
