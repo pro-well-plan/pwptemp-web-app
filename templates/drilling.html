@@ -36,6 +36,12 @@
             </div>
 
             <div class="form-group">
+              <label>Drill String:</label>
+              - od (m): <input name="ddo" type="number" step=".0001" value="{{ ddo|safe }}">
+                  - id (m): <input name="ddi" type="number" step=".0001" value="{{ ddi|safe }}">
+            </div>
+
+            <div class="form-group">
               <label>Water Depth (m)</label>
               <input type="number" id="wd" name="wd" placeholder="Water depth" step=".0001" value="{{ wd|safe }}"> <br><br>
               <label>&emsp;&emsp;Riser:</label>

@@ -39,7 +39,7 @@ def drilling():
                            an=inputs['an'], rhol=inputs['rhol'], rhod=inputs['rhod'], rhoc=inputs['rhoc'],
                            rhor=inputs['rhor'], rhofm=inputs['rhofm'], rhow=inputs['rhow'], rhocem=inputs['rhocem'],
                            plot_md=inputs['plot_md'], deltat=inputs['deltat'], n_casings=inputs['n_casings'],
-                           dro=inputs['dro'], dri=inputs['dri'])
+                           dro=inputs['dro'], dri=inputs['dri'], ddo=inputs['ddo'], ddi=inputs['ddi'])
 
     return encode_utf8(html)
 
@@ -70,6 +70,8 @@ def plot():
     n_casings = request.args.get("n_casings")
     dro = request.args.get("dro")
     dri = request.args.get("dri")
+    ddo = request.args.get("ddo")
+    ddi = request.args.get("ddi")
 
     # OPERATIONAL PARAMETERS
     tin = request.args.get("tin")
@@ -117,6 +119,8 @@ def plot():
         casings_list = []
         dro = 0.5334
         dri = 0.45
+        ddo = 0.114
+        ddi = 0.101
 
         # OPERATIONAL PARAMETERS
         tin = 20
@@ -168,6 +172,8 @@ def plot():
             casings_list.append(csg_dict)
         dro = float(dro)
         dri = float(dri)
+        ddo = float(ddo)
+        ddi = float(ddi)
 
             # OPERATIONAL PARAMETERS
         tin = float(tin)
@@ -194,7 +200,8 @@ def plot():
 
     # Others parameters: the ones which should be used for the attribute 'change_inputs'
     others = {'wd':wd, 'tin':tin, 'q':q, 'rpm':rpm, 't':t, 'tbit':tbit, 'wob':wob, 'rop':rop, 'an':an, 'rhol':rhol,
-              'rhod':rhod, 'rhoc':rhoc, 'rhor':rhor, 'rhofm':rhofm, 'rhow':rhow, 'rhocem':rhocem, 'dro':dro, 'dri':dri}
+              'rhod':rhod, 'rhoc':rhoc, 'rhor':rhor, 'rhofm':rhofm, 'rhow':rhow, 'rhocem':rhocem, 'dro':dro, 'dri':dri,
+              'ddo':ddo, 'ddi':ddi}
 
     inputs.update(others)  # Merge 'others' into the 'inputs' dictionary
 
