@@ -27,17 +27,17 @@
 
             <div class="form-group">
               <label>Circulation Time (h)</label>
-              <input type="text" id="time" name="time" value="{{ time|safe }}">
+              <input type="number" id="time" name="time" value="{{ time|safe }}">
             </div>
 
             <div class="form-group">
               <label>Total Depth (m)</label>
-              <input type="text" id="depth" name="depth" placeholder="Depth" value="{{ depth|safe }}">
+              <input type="number" id="depth" name="depth" placeholder="Depth" value="{{ depth|safe }}">
             </div>
 
             <div class="form-group">
               <label>Water Depth (m)</label>
-              <input type="text" id="wd" name="wd" placeholder="Water depth" value="{{ wd|safe }}">
+              <input type="number" id="wd" name="wd" placeholder="Water depth" value="{{ wd|safe }}">
             </div>
 
             <div class="form-group">
@@ -52,13 +52,13 @@
                     $("#rolonum").html('');
                     $("#rolonum").append('<br>')
                     for (var i = 1; i <= n; i++) {
-                      $("#rolonum").append('<p>&emsp;&emsp;<span>casing ' + i + ': </span> - od: <input name="od' + i + '" type="text" value="" required/> - id: <input name="id' + i + '" type="text" value="" required/> - depth (m): <input name="depth' + i + '" type="text" value="" required/></p>');
+                      $("#rolonum").append('<p>&emsp;&emsp;<span>casing ' + i + ': </span> - od: <input name="od' + i + '" type="number" step=".001" value="" required/> - id: <input name="id' + i + '" type="number" step=".001" value="" required/> - depth (m): <input name="depth' + i + '" type="number" step=".001" value="" required/></p>');
                     }
                   }
                 }
                 </script>
 
-                <input id="my_input" name="n_casings" type="text" value="0">
+                <input id="my_input" name="n_casings" type="number" value="{{ n_casings|safe }}">
 
                 <button data-toggle="modal" data-target="#myModal" id="add_input1" name="" type="button" onclick="add_inputboxes()">Add</button>
 
@@ -114,13 +114,13 @@
                   <input type="radio" name="well_profile" value="S"> S-type &nbsp;&nbsp;
                   <input type="radio" name="well_profile" value="H1"> Horizontal single-curve &nbsp;&nbsp;
                   <input type="radio" name="well_profile" value="H2"> Horizontal double-curve<br><br>
-                  kick-off point (kop, m): <input type="text" id="kop" name="kop" value="{{ kop|safe }}"> &nbsp;&nbsp;
-                  end of build (eob, m): <input type="text" id="eob" name="eob" value="{{ eob|safe }}"> <br><br>
-                  build angle (°): <input type="text" id="build_angle" name="build_angle" value="{{ build_angle|safe }}"><br><br>
-                  kick-off point 2 (kop2, m): <input type="text" id="kop2" name="kop2" value="{{ kop2|safe }}"> &nbsp;&nbsp;
-                  end of build 2 (eob2, m): <input type="text" id="eob2" name="eob2" value="{{ eob2|safe }}"><br><br>
-                  start of drop (sod, m): <input type="text" id="sod" name="sod" value="{{ sod|safe }}"> &nbsp;&nbsp;
-                  end of drop (eod, m): <input type="text" id="eod" name="eod" value="{{ eod|safe }}"> <br><br>
+                  kick-off point (kop, m): <input type="number" id="kop" name="kop" value="{{ kop|safe }}"> &nbsp;&nbsp;
+                  end of build (eob, m): <input type="number" id="eob" name="eob" value="{{ eob|safe }}"> <br><br>
+                  build angle (°): <input type="number" id="build_angle" name="build_angle" value="{{ build_angle|safe }}"><br><br>
+                  kick-off point 2 (kop2, m): <input type="number" id="kop2" name="kop2" value="{{ kop2|safe }}"> &nbsp;&nbsp;
+                  end of build 2 (eob2, m): <input type="number" id="eob2" name="eob2" value="{{ eob2|safe }}"><br><br>
+                  start of drop (sod, m): <input type="number" id="sod" name="sod" value="{{ sod|safe }}"> &nbsp;&nbsp;
+                  end of drop (eod, m): <input type="number" id="eod" name="eod" value="{{ eod|safe }}"> <br><br>
               </div>
             </div>
 
@@ -128,14 +128,14 @@
               <button type ="button" class="collapsible">Operational Parameters</button>
               <div class="content">
                   <br>
-                  fluid inlet temperature (°C): <input type="text" id="tin" name="tin" value="{{ tin|safe }}"> &nbsp;&nbsp;
-                  circulation rate (m3/h): <input type="text" id="q" name="q" value="{{ q|safe }}"> <br><br>
-                  RPM: <input type="text" id="rpm" name="rpm" value="{{ rpm|safe }}"> &nbsp;&nbsp;
-                  torque on the drill string (kN*m): <input type="text" id="t" name="t" value="{{ t|safe }}"> <br><br>
-                  torque on the bit (kN*m): <input type="text" id="tbit" name="tbit" value="{{ tbit|safe }}"> &nbsp;&nbsp;
-                  weight on bit (kN): <input type="text" id="wob" name="wob" value="{{ wob|safe }}"> <br><br>
-                  ROP (m/h): <input type="text" id="rop" name="rop" value="{{ rop|safe }}"> &nbsp;&nbsp;
-                  area of the nozzles (m2): <input type="text" id="an" name="an" value="{{ an|safe }}"> <br><br>
+                  fluid inlet temperature (°C): <input type="number" id="tin" name="tin" value="{{ tin|safe }}"> &nbsp;&nbsp;
+                  circulation rate (m3/h): <input type="number" id="q" name="q" value="{{ q|safe }}"> <br><br>
+                  RPM: <input type="number" id="rpm" name="rpm" value="{{ rpm|safe }}"> &nbsp;&nbsp;
+                  torque on the drill string (kN*m): <input type="number" id="t" name="t" value="{{ t|safe }}"> <br><br>
+                  torque on the bit (kN*m): <input type="number" id="tbit" name="tbit" value="{{ tbit|safe }}"> &nbsp;&nbsp;
+                  weight on bit (kN): <input type="number" id="wob" name="wob" value="{{ wob|safe }}"> <br><br>
+                  ROP (m/h): <input type="number" id="rop" name="rop" value="{{ rop|safe }}"> &nbsp;&nbsp;
+                  area of the nozzles (m2): <input type="number" id="an" name="an" value="{{ an|safe }}"> <br><br>
               </div>
             </div>
 
@@ -143,13 +143,13 @@
               <button type ="button" class="collapsible">Densities</button>
               <div class="content">
                   <br>
-                  fluid density (kg/m3): <input type="text" id="rhol" name="rhol" value="{{ rhol|safe }}"> &nbsp;&nbsp;
-                  drill pipe density (kg/m3): <input type="text" id="rhod" name="rhod" value="{{ rhod|safe }}"> <br><br>
-                  casing density (kg/m3): <input type="text" id="rhoc" name="rhoc" value="{{ rhoc|safe }}"> &nbsp;&nbsp;
-                  riser density (kg/m3): <input type="text" id="rhor" name="rhor" value="{{ rhor|safe }}"> <br><br>
-                  formation density (kg/m3): <input type="text" id="rhofm" name="rhofm" value="{{ rhofm|safe }}"> &nbsp;&nbsp;
-                  seawater density (kg/m3): <input type="text" id="rhow" name="rhow" value="{{ rhow|safe }}"> <br><br>
-                  cement density (kg/m3): <input type="text" id="rhocem" name="rhocem" value="{{ rhocem|safe }}"> <br><br>
+                  fluid density (kg/m3): <input type="number" id="rhol" name="rhol" value="{{ rhol|safe }}"> &nbsp;&nbsp;
+                  drill pipe density (kg/m3): <input type="number" id="rhod" name="rhod" value="{{ rhod|safe }}"> <br><br>
+                  casing density (kg/m3): <input type="number" id="rhoc" name="rhoc" value="{{ rhoc|safe }}"> &nbsp;&nbsp;
+                  riser density (kg/m3): <input type="number" id="rhor" name="rhor" value="{{ rhor|safe }}"> <br><br>
+                  formation density (kg/m3): <input type="number" id="rhofm" name="rhofm" value="{{ rhofm|safe }}"> &nbsp;&nbsp;
+                  seawater density (kg/m3): <input type="number" id="rhow" name="rhow" value="{{ rhow|safe }}"> <br><br>
+                  cement density (kg/m3): <input type="number" id="rhocem" name="rhocem" value="{{ rhocem|safe }}"> <br><br>
               </div>
             </div>
 

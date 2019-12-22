@@ -38,7 +38,7 @@ def drilling():
                            rpm=inputs['rpm'], t=inputs['t'], tbit=inputs['tbit'], wob=inputs['wob'], rop=inputs['rop'],
                            an=inputs['an'], rhol=inputs['rhol'], rhod=inputs['rhod'], rhoc=inputs['rhoc'],
                            rhor=inputs['rhor'], rhofm=inputs['rhofm'], rhow=inputs['rhow'], rhocem=inputs['rhocem'],
-                           plot_md=inputs['plot_md'], deltat=inputs['deltat'])
+                           plot_md=inputs['plot_md'], deltat=inputs['deltat'], n_casings=inputs['n_casings'])
 
     return encode_utf8(html)
 
@@ -177,8 +177,9 @@ def plot():
 
     inputs = {'time':time, 'depth':depth, 'wd':wd, 'well_profile':well_profile, 'kop':kop, 'eob':eob,
               'build_angle':build_angle, 'kop2':kop2, 'eob2':eob2, 'sod':sod, 'eod':eod, 'plot_type':plot_type,
-              'plot_md':plot_md, 'deltat':deltat}
+              'plot_md':plot_md, 'deltat':deltat, 'n_casings':n_casings}
 
+    # Others parameters: the ones which should be used for the attribute 'change_inputs'
     others = {'wd':wd, 'tin':tin, 'q':q, 'rpm':rpm, 't':t, 'tbit':tbit, 'wob':wob, 'rop':rop, 'an':an, 'rhol':rhol,
               'rhod':rhod, 'rhoc':rhoc, 'rhor':rhor, 'rhofm':rhofm, 'rhow':rhow, 'rhocem':rhocem}
 
