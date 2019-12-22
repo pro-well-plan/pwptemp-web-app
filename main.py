@@ -5,6 +5,7 @@ from bokeh.layouts import row
 from bokeh.embed import components
 from bokeh.resources import INLINE
 from bokeh.util.string import encode_utf8
+from pwptemp.wellpath import get
 
 app = Flask(__name__)
 app.secret_key = 'random secret'
@@ -63,6 +64,7 @@ def plot():
     dt_tcsg = request.args.get("dt_tcsg")
     dt_tfm = request.args.get("dt_tfm")
     dt_tsr = request.args.get("dt_tsr")
+    n_casings = request.args.get("n_casings")
 
     # OPERATIONAL PARAMETERS
     tin = request.args.get("tin")
@@ -104,6 +106,8 @@ def plot():
         dt_tcsg = False
         dt_tfm = True
         dt_tsr = False
+        n_casings = 0
+        casings_list = []
 
         # OPERATIONAL PARAMETERS
         tin = 20
@@ -145,8 +149,14 @@ def plot():
         dt_tcsg = bool(dt_tcsg)
         dt_tfm = bool(dt_tfm)
         dt_tsr = bool(dt_tsr)
+        n_casings = int(n_casings)
+        casings_list = []
+        for i in range(1, n_casings+1):
+            csg_dict = {"od": float(request.args.get("od" + str(i))), "id": float(request.args.get("id" + str(i))),
+                        "depth": float(request.args.get("depth" + str(i)))}
+            casings_list.append(csg_dict)
 
-        # OPERATIONAL PARAMETERS
+            # OPERATIONAL PARAMETERS
         tin = float(tin)
         q = float(q)
         rpm = float(rpm)
@@ -178,8 +188,8 @@ def plot():
 
     if error_raised == 0:
         if plot_type != 5:
-            temp = ptd.temp(time, mdt=depth, profile=well_profile, change_input=others, build_angle=build_angle, kop=kop,
-                            eob=eob, kop2=kop2, eob2=eob2, sod=sod, eod=eod)
+            temp = ptd.temp(time, mdt=depth, casings=casings_list, profile=well_profile, change_input=others,
+                            build_angle=build_angle, kop=kop, eob=eob, kop2=kop2, eob2=eob2, sod=sod, eod=eod)
 
         if plot_type == 1:
             fig1 = create_figure1(temp)
@@ -194,10 +204,9 @@ def plot():
                               kop=kop, eob=eob, kop2=kop2, eob2=eob2, sod=sod, eod=eod)
             fig1 = create_figure5(temps, tdsi=dt_tdsi, ta=dt_ta, tr=dt_tr, tcsg=dt_tcsg, tfm=dt_tfm, tsr=dt_tsr)
 
-        from pwptemp.wellpath import get
-        profile = get(depth, profile=well_profile, build_angle=build_angle, kop=kop, eob=eob, kop2=kop2,
+        wellpath = get(depth, profile=well_profile, build_angle=build_angle, kop=kop, eob=eob, kop2=kop2,
                                        eob2=eob2, sod=sod, eod=eod)
-        fig2 = plot_profile(profile)
+        fig2 = plot_wellpath(wellpath)
 
         p = row(fig2, fig1)
 
@@ -207,9 +216,9 @@ def plot():
     return p, inputs
 
 
-def plot_profile(profile):
+def plot_wellpath(wellpath):
     p = figure(sizing_mode='stretch_both')
-    p.line(profile.hd, profile.tvd, line_color='blue')
+    p.line(wellpath.hd, wellpath.tvd, line_color='blue')
     p.xaxis.axis_label = 'Horizontal Displacement, m'
     p.yaxis.axis_label = 'TVD, m'
     p.title.text = 'Well Profile'
@@ -224,12 +233,13 @@ def create_figure1(temp, sr=False):
     riser = temp.riser
     tr = [i for i in temp.tr if i]
     csg = temp.csgs_reach
+    tcsg = [i for i in temp.tcsg if i]
     p.line(temp.tdsi, md, line_color='red', legend_label='Fluid in Drill String')  # Temp. inside Drillpipe vs Depth
     p.line(temp.ta, md, line_color='blue', legend_label='Fluid in Annulus')
     if riser > 0:
         p.line(tr, md, line_color='green', legend_label='Riser')  # Temp. due to gradient vs Depth
     if csg > 0:
-        p.line(temp.tcsg, md, line_color='orange', legend_label='Casing')  # Temp. due to gradient vs Depth
+        p.line(tcsg, md, line_color='orange', legend_label='Casing')  # Temp. due to gradient vs Depth
     p.line(temp.tfm, md, line_color='darkred', legend_label='Formation')  # Temp. due to gradient vs Depth
     if sr:
         # Temp. due to gradient vs Depth
@@ -302,7 +312,8 @@ def create_figure5(temps, tdsi=True, ta=False, tr=False, tcsg=False, tfm=True, t
             tr = [i for i in temps.values[x].tr if i]
             p.line(tr, md, line_color=color[x], legend_label='Riser at %1.1f hours' % temps.times[x])
         if csg > 0 and tcsg:
-            p.line(temps.values[x].tcsg, md, line_color=color[x], legend_label='Casing at %1.1f hours' % temps.times[x])
+            tcsg_list = [i for i in temps.values[x].tcsg if i]
+            p.line(tcsg_list, md, line_color=color[x], legend_label='Casing at %1.1f hours' % temps.times[x])
         if tsr:
             # Temp. due to gradient vs Depth
             p.line(temps.values[x].tsr, md, line_color=color[x], legen_label='Surrounding Space')

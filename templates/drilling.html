@@ -40,6 +40,33 @@
               <input type="text" id="wd" name="wd" placeholder="Water depth" value="{{ wd|safe }}">
             </div>
 
+            <div class="form-group">
+                <label>Casings</label>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                <script>
+                function add_inputboxes() {
+                  n = $('#my_input').val();
+                  if (n < 1)
+                    alert("ERROR: Enter a positive number");
+                  else {
+                    $("#rolonum").html('');
+                    $("#rolonum").append('<br>')
+                    for (var i = 1; i <= n; i++) {
+                      $("#rolonum").append('<p>&emsp;&emsp;<span>casing ' + i + ': </span> - od: <input name="od' + i + '" type="text" value="" required/> - id: <input name="id' + i + '" type="text" value="" required/> - depth (m): <input name="depth' + i + '" type="text" value="" required/></p>');
+                    }
+                  }
+                }
+                </script>
+
+                <input id="my_input" name="n_casings" type="text" value="0">
+
+                <button data-toggle="modal" data-target="#myModal" id="add_input1" name="" type="button" onclick="add_inputboxes()">Add</button>
+
+                <div id="rolonum"></div>
+
+                <br><br>
+            </div>
+
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <style>
             .collapsible {
