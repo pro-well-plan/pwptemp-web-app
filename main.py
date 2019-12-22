@@ -38,7 +38,8 @@ def drilling():
                            rpm=inputs['rpm'], t=inputs['t'], tbit=inputs['tbit'], wob=inputs['wob'], rop=inputs['rop'],
                            an=inputs['an'], rhol=inputs['rhol'], rhod=inputs['rhod'], rhoc=inputs['rhoc'],
                            rhor=inputs['rhor'], rhofm=inputs['rhofm'], rhow=inputs['rhow'], rhocem=inputs['rhocem'],
-                           plot_md=inputs['plot_md'], deltat=inputs['deltat'], n_casings=inputs['n_casings'])
+                           plot_md=inputs['plot_md'], deltat=inputs['deltat'], n_casings=inputs['n_casings'],
+                           dro=inputs['dro'], dri=inputs['dri'])
 
     return encode_utf8(html)
 
@@ -64,7 +65,11 @@ def plot():
     dt_tcsg = request.args.get("dt_tcsg")
     dt_tfm = request.args.get("dt_tfm")
     dt_tsr = request.args.get("dt_tsr")
+
+    # TUBULAR
     n_casings = request.args.get("n_casings")
+    dro = request.args.get("dro")
+    dri = request.args.get("dri")
 
     # OPERATIONAL PARAMETERS
     tin = request.args.get("tin")
@@ -107,7 +112,11 @@ def plot():
         dt_tfm = True
         dt_tsr = False
         n_casings = 0
+
+        # TUBULAR
         casings_list = []
+        dro = 0.5334
+        dri = 0.45
 
         # OPERATIONAL PARAMETERS
         tin = 20
@@ -150,11 +159,15 @@ def plot():
         dt_tfm = bool(dt_tfm)
         dt_tsr = bool(dt_tsr)
         n_casings = int(n_casings)
+
+        # TUBULAR
         casings_list = []
         for i in range(1, n_casings+1):
             csg_dict = {"od": float(request.args.get("od" + str(i))), "id": float(request.args.get("id" + str(i))),
                         "depth": float(request.args.get("depth" + str(i)))}
             casings_list.append(csg_dict)
+        dro = float(dro)
+        dri = float(dri)
 
             # OPERATIONAL PARAMETERS
         tin = float(tin)
@@ -181,7 +194,7 @@ def plot():
 
     # Others parameters: the ones which should be used for the attribute 'change_inputs'
     others = {'wd':wd, 'tin':tin, 'q':q, 'rpm':rpm, 't':t, 'tbit':tbit, 'wob':wob, 'rop':rop, 'an':an, 'rhol':rhol,
-              'rhod':rhod, 'rhoc':rhoc, 'rhor':rhor, 'rhofm':rhofm, 'rhow':rhow, 'rhocem':rhocem}
+              'rhod':rhod, 'rhoc':rhoc, 'rhor':rhor, 'rhofm':rhofm, 'rhow':rhow, 'rhocem':rhocem, 'dro':dro, 'dri':dri}
 
     inputs.update(others)  # Merge 'others' into the 'inputs' dictionary
 

@@ -27,17 +27,20 @@
 
             <div class="form-group">
               <label>Circulation Time (h)</label>
-              <input type="number" id="time" name="time" value="{{ time|safe }}">
+              <input type="number" id="time" name="time" step=".0001" value="{{ time|safe }}">
             </div>
 
             <div class="form-group">
               <label>Total Depth (m)</label>
-              <input type="number" id="depth" name="depth" placeholder="Depth" value="{{ depth|safe }}">
+              <input type="number" id="depth" name="depth" placeholder="Depth" step=".0001" value="{{ depth|safe }}">
             </div>
 
             <div class="form-group">
               <label>Water Depth (m)</label>
-              <input type="number" id="wd" name="wd" placeholder="Water depth" value="{{ wd|safe }}">
+              <input type="number" id="wd" name="wd" placeholder="Water depth" step=".0001" value="{{ wd|safe }}"> <br><br>
+              <label>&emsp;&emsp;Riser:</label>
+              - od (m): <input name="dro" type="number" step=".0001" value="{{ dro|safe }}">
+                  - id (m): <input name="dri" type="number" step=".0001" value="{{ dri|safe }}">
             </div>
 
             <div class="form-group">
@@ -52,7 +55,7 @@
                     $("#rolonum").html('');
                     $("#rolonum").append('<br>')
                     for (var i = 1; i <= n; i++) {
-                      $("#rolonum").append('<p>&emsp;&emsp;<span>casing ' + i + ': </span> - od: <input name="od' + i + '" type="number" step=".001" value="" required/> - id: <input name="id' + i + '" type="number" step=".001" value="" required/> - depth (m): <input name="depth' + i + '" type="number" step=".001" value="" required/></p>');
+                      $("#rolonum").append('<p>&emsp;&emsp;<span>casing ' + i + ': </span> - od (m): <input name="od' + i + '" type="number" step=".0001" value="" required/> - id (m): <input name="id' + i + '" type="number" step=".0001" value="" required/> - depth (m): <input name="depth' + i + '" type="number" step=".0001" value="" required/></p>');
                     }
                   }
                 }
@@ -114,13 +117,13 @@
                   <input type="radio" name="well_profile" value="S"> S-type &nbsp;&nbsp;
                   <input type="radio" name="well_profile" value="H1"> Horizontal single-curve &nbsp;&nbsp;
                   <input type="radio" name="well_profile" value="H2"> Horizontal double-curve<br><br>
-                  kick-off point (kop, m): <input type="number" id="kop" name="kop" value="{{ kop|safe }}"> &nbsp;&nbsp;
-                  end of build (eob, m): <input type="number" id="eob" name="eob" value="{{ eob|safe }}"> <br><br>
-                  build angle (°): <input type="number" id="build_angle" name="build_angle" value="{{ build_angle|safe }}"><br><br>
-                  kick-off point 2 (kop2, m): <input type="number" id="kop2" name="kop2" value="{{ kop2|safe }}"> &nbsp;&nbsp;
-                  end of build 2 (eob2, m): <input type="number" id="eob2" name="eob2" value="{{ eob2|safe }}"><br><br>
-                  start of drop (sod, m): <input type="number" id="sod" name="sod" value="{{ sod|safe }}"> &nbsp;&nbsp;
-                  end of drop (eod, m): <input type="number" id="eod" name="eod" value="{{ eod|safe }}"> <br><br>
+                  kick-off point (kop, m): <input type="number" id="kop" name="kop" step=".0001" value="{{ kop|safe }}"> &nbsp;&nbsp;
+                  end of build (eob, m): <input type="number" id="eob" name="eob" step=".0001" value="{{ eob|safe }}"> <br><br>
+                  build angle (°): <input type="number" id="build_angle" name="build_angle" step=".0001" value="{{ build_angle|safe }}"><br><br>
+                  kick-off point 2 (kop2, m): <input type="number" id="kop2" name="kop2" step=".0001" value="{{ kop2|safe }}"> &nbsp;&nbsp;
+                  end of build 2 (eob2, m): <input type="number" id="eob2" name="eob2" step=".0001" value="{{ eob2|safe }}"><br><br>
+                  start of drop (sod, m): <input type="number" id="sod" name="sod" step=".0001" value="{{ sod|safe }}"> &nbsp;&nbsp;
+                  end of drop (eod, m): <input type="number" id="eod" name="eod" step=".0001" value="{{ eod|safe }}"> <br><br>
               </div>
             </div>
 
@@ -128,14 +131,14 @@
               <button type ="button" class="collapsible">Operational Parameters</button>
               <div class="content">
                   <br>
-                  fluid inlet temperature (°C): <input type="number" id="tin" name="tin" value="{{ tin|safe }}"> &nbsp;&nbsp;
-                  circulation rate (m3/h): <input type="number" id="q" name="q" value="{{ q|safe }}"> <br><br>
-                  RPM: <input type="number" id="rpm" name="rpm" value="{{ rpm|safe }}"> &nbsp;&nbsp;
-                  torque on the drill string (kN*m): <input type="number" id="t" name="t" value="{{ t|safe }}"> <br><br>
-                  torque on the bit (kN*m): <input type="number" id="tbit" name="tbit" value="{{ tbit|safe }}"> &nbsp;&nbsp;
-                  weight on bit (kN): <input type="number" id="wob" name="wob" value="{{ wob|safe }}"> <br><br>
-                  ROP (m/h): <input type="number" id="rop" name="rop" value="{{ rop|safe }}"> &nbsp;&nbsp;
-                  area of the nozzles (m2): <input type="number" id="an" name="an" value="{{ an|safe }}"> <br><br>
+                  fluid inlet temperature (°C): <input type="number" id="tin" name="tin" step=".0001" value="{{ tin|safe }}"> &nbsp;&nbsp;
+                  circulation rate (m3/h): <input type="number" id="q" name="q" step=".0001" value="{{ q|safe }}"> <br><br>
+                  RPM: <input type="number" id="rpm" name="rpm" step=".0001" value="{{ rpm|safe }}"> &nbsp;&nbsp;
+                  torque on the drill string (kN*m): <input type="number" id="t" name="t" step=".0001" value="{{ t|safe }}"> <br><br>
+                  torque on the bit (kN*m): <input type="number" id="tbit" name="tbit" step=".0001" value="{{ tbit|safe }}"> &nbsp;&nbsp;
+                  weight on bit (kN): <input type="number" id="wob" name="wob" step=".0001" value="{{ wob|safe }}"> <br><br>
+                  ROP (m/h): <input type="number" id="rop" name="rop" step=".0001" value="{{ rop|safe }}"> &nbsp;&nbsp;
+                  area of the nozzles (m2): <input type="number" id="an" name="an" step=".0001" value="{{ an|safe }}"> <br><br>
               </div>
             </div>
 
@@ -143,13 +146,13 @@
               <button type ="button" class="collapsible">Densities</button>
               <div class="content">
                   <br>
-                  fluid density (kg/m3): <input type="number" id="rhol" name="rhol" value="{{ rhol|safe }}"> &nbsp;&nbsp;
-                  drill pipe density (kg/m3): <input type="number" id="rhod" name="rhod" value="{{ rhod|safe }}"> <br><br>
-                  casing density (kg/m3): <input type="number" id="rhoc" name="rhoc" value="{{ rhoc|safe }}"> &nbsp;&nbsp;
-                  riser density (kg/m3): <input type="number" id="rhor" name="rhor" value="{{ rhor|safe }}"> <br><br>
-                  formation density (kg/m3): <input type="number" id="rhofm" name="rhofm" value="{{ rhofm|safe }}"> &nbsp;&nbsp;
-                  seawater density (kg/m3): <input type="number" id="rhow" name="rhow" value="{{ rhow|safe }}"> <br><br>
-                  cement density (kg/m3): <input type="number" id="rhocem" name="rhocem" value="{{ rhocem|safe }}"> <br><br>
+                  fluid density (kg/m3): <input type="number" id="rhol" name="rhol" step=".0001" value="{{ rhol|safe }}"> &nbsp;&nbsp;
+                  drill pipe density (kg/m3): <input type="number" id="rhod" name="rhod" step=".0001" value="{{ rhod|safe }}"> <br><br>
+                  casing density (kg/m3): <input type="number" id="rhoc" name="rhoc" step=".0001" value="{{ rhoc|safe }}"> &nbsp;&nbsp;
+                  riser density (kg/m3): <input type="number" id="rhor" name="rhor" step=".0001" value="{{ rhor|safe }}"> <br><br>
+                  formation density (kg/m3): <input type="number" id="rhofm" name="rhofm" step=".0001" value="{{ rhofm|safe }}"> &nbsp;&nbsp;
+                  seawater density (kg/m3): <input type="number" id="rhow" name="rhow" step=".0001" value="{{ rhow|safe }}"> <br><br>
+                  cement density (kg/m3): <input type="number" id="rhocem" name="rhocem" step=".0001" value="{{ rhocem|safe }}"> <br><br>
               </div>
             </div>
 
