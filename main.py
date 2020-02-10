@@ -21,6 +21,11 @@ def contributors():
     return render_template("contributors.html")
 
 
+@app.route("/production")
+def production():
+    return render_template("production.html")
+
+
 @app.route("/drilling")
 def drilling():
     p, inputs = plot()
