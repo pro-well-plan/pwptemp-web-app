@@ -44,7 +44,8 @@ def drilling():
                            an=inputs['an'], rhol=inputs['rhol'], rhod=inputs['rhod'], rhoc=inputs['rhoc'],
                            rhor=inputs['rhor'], rhofm=inputs['rhofm'], rhow=inputs['rhow'], rhocem=inputs['rhocem'],
                            plot_md=inputs['plot_md'], deltat=inputs['deltat'], n_casings=inputs['n_casings'],
-                           dro=inputs['dro'], dri=inputs['dri'], ddo=inputs['ddo'], ddi=inputs['ddi'])
+                           dro=inputs['dro'], dri=inputs['dri'], ddo=inputs['ddo'], ddi=inputs['ddi'], wtg=inputs['wtg'],
+                           gt=inputs['gt'])
 
     return encode_utf8(html)
 
@@ -97,6 +98,9 @@ def plot():
     rhow = request.args.get("rhow")
     rhocem = request.args.get("rhocem")
 
+    wtg = request.args.get("wtg")
+    gt = request.args.get("gt")
+
     if time is None:
         time = 5
         depth = 3000
@@ -122,29 +126,32 @@ def plot():
 
         # TUBULAR
         casings_list = []
-        dro = 0.5334
-        dri = 0.45
-        ddo = 0.114
-        ddi = 0.101
+        dro = 21
+        dri = 17.716
+        ddo = 4.5
+        ddi = 4
 
         # OPERATIONAL PARAMETERS
         tin = 20
-        q = 47.696
+        q = 794.933
         rpm = 100
         t = 2
         tbit = 1.35
         wob = 22.41
         rop = 14.4
-        an = 2
+        an = 3100
 
         # DENSITIES
-        rhol = 1198
-        rhod = 7600
-        rhoc = 7800
-        rhor = 7800
-        rhofm = 2245
-        rhow = 1029
-        rhocem = 2700
+        rhol = 1.198
+        rhod = 7.6
+        rhoc = 7.8
+        rhor = 7.8
+        rhofm = 2.245
+        rhow = 1.029
+        rhocem = 2.7
+
+        wtg = -0.005
+        gt = 0.0238
 
     else:
         time = float(time)
@@ -180,7 +187,7 @@ def plot():
         ddo = float(ddo)
         ddi = float(ddi)
 
-            # OPERATIONAL PARAMETERS
+        # OPERATIONAL PARAMETERS
         tin = float(tin)
         q = float(q)
         rpm = float(rpm)
@@ -199,6 +206,9 @@ def plot():
         rhow = float(rhow)
         rhocem = float(rhocem)
 
+        wtg = float(wtg)
+        gt = float(gt)
+
     inputs = {'time':time, 'depth':depth, 'wd':wd, 'well_profile':well_profile, 'kop':kop, 'eob':eob,
               'build_angle':build_angle, 'kop2':kop2, 'eob2':eob2, 'sod':sod, 'eod':eod, 'plot_type':plot_type,
               'plot_md':plot_md, 'deltat':deltat, 'n_casings':n_casings}
@@ -206,7 +216,7 @@ def plot():
     # Others parameters: the ones which should be used for the attribute 'change_inputs'
     others = {'wd':wd, 'tin':tin, 'q':q, 'rpm':rpm, 't':t, 'tbit':tbit, 'wob':wob, 'rop':rop, 'an':an, 'rhol':rhol,
               'rhod':rhod, 'rhoc':rhoc, 'rhor':rhor, 'rhofm':rhofm, 'rhow':rhow, 'rhocem':rhocem, 'dro':dro, 'dri':dri,
-              'ddo':ddo, 'ddi':ddi}
+              'ddo':ddo, 'ddi':ddi, 'wtg':wtg, 'gt':gt}
 
     inputs.update(others)  # Merge 'others' into the 'inputs' dictionary
 

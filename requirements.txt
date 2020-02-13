@@ -1,3 +1,3 @@
 Flask
 bokeh
-pwptemp==0.1.3
+pwptemp==0.1.4
