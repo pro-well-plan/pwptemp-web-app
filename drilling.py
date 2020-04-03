@@ -178,7 +178,7 @@ def define_plot():
         if plot_type == 1:
             fig1 = create_figure1(temp)
         if plot_type == 4:
-            fig1 = create_figure4(temp.stab())
+            fig1 = create_figure4(temp.behavior())
         if plot_type == 5:
             temp = ptd.temp(time, mdt=depth, log=True, profile=well_profile, change_input=others,
                               build_angle=build_angle, kop=kop, eob=eob, kop2=kop2, eob2=eob2, sod=sod, eod=eod)
@@ -233,14 +233,15 @@ def create_figure1(temp, sr=False):
     return p
 
 
-def create_figure4(stab_data):
+def create_figure4(behavior):
     p = figure(sizing_mode='stretch_both')
-    p.line(range(stab_data.finaltime), stab_data.tbot, line_color='blue', legend_label='Bottom')  # Temp. inside Annulus vs Time
-    p.line(range(stab_data.finaltime), stab_data.tout, line_color='red', legend_label='Outlet (Annular)')  # Temp. inside Annulus vs Time
-    p.line(range(stab_data.finaltime), [stab_data.tfm[-1]] * len(stab_data.tbot), line_color='black', legend_label='Formation')  # Formation Temp. vs Time
+    time = int(behavior.finaltime)
+    p.line(range(time), behavior.tbot, line_color='blue', legend_label='Bottom')  # Temp. inside Annulus vs Time
+    p.line(range(time), behavior.tout, line_color='red', legend_label='Outlet (Annular)')  # Temp. inside Annulus vs Time
+    p.line(range(time), [behavior.tfm[-1]] * len(behavior.tbot), line_color='black', legend_label='Formation')  # Formation Temp. vs Time
     p.xaxis.axis_label = 'Time, h'
     p.yaxis.axis_label = 'Temperature, °C'
-    p.title.text = 'Temperature behavior before stabilization (%1.1f hours)' % stab_data.finaltime
+    p.title.text = 'Temperature behavior before stabilization (%1.1f hours)' % behavior.finaltime
     p.toolbar.active_drag = None  # disable drag by default
     return p
 
