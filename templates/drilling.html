@@ -141,8 +141,7 @@
                   <br>
                   fluid inlet temperature (°C): <input type="number" id="tin" name="tin" step=".0001" value="{{ tin|safe }}"> &nbsp;&nbsp;
                   circulation rate (lpm): <input type="number" id="q" name="q" step=".0001" value="{{ q|safe }}"> <br><br>
-                  RPM: <input type="number" id="rpm" name="rpm" step=".0001" value="{{ rpm|safe }}"> &nbsp;&nbsp;
-                  torque on the drill string (kN*m): <input type="number" id="t" name="t" step=".0001" value="{{ t|safe }}"> <br><br>
+                  RPM: <input type="number" id="rpm" name="rpm" step=".0001" value="{{ rpm|safe }}"> &nbsp;&nbsp
                   torque on the bit (kN*m): <input type="number" id="tbit" name="tbit" step=".0001" value="{{ tbit|safe }}"> &nbsp;&nbsp;
                   weight on bit (kN): <input type="number" id="wob" name="wob" step=".0001" value="{{ wob|safe }}"> <br><br>
                   ROP (m/h): <input type="number" id="rop" name="rop" step=".0001" value="{{ rop|safe }}"> &nbsp;&nbsp;
@@ -154,7 +153,7 @@
               <button type ="button" class="collapsible">Densities</button>
               <div class="content">
                   <br>
-                  fluid density (sg): <input type="number" id="rhol" name="rhol" step=".0001" value="{{ rhol|safe }}"> &nbsp;&nbsp;
+                  fluid density (sg): <input type="number" id="rhof" name="rhof" step=".0001" value="{{ rhof|safe }}"> &nbsp;&nbsp;
                   drill pipe density (sg): <input type="number" id="rhod" name="rhod" step=".0001" value="{{ rhod|safe }}"> <br><br>
                   casing density (sg): <input type="number" id="rhoc" name="rhoc" step=".0001" value="{{ rhoc|safe }}"> &nbsp;&nbsp;
                   riser density (sg): <input type="number" id="rhor" name="rhor" step=".0001" value="{{ rhor|safe }}"> <br><br>
@@ -168,12 +167,8 @@
               <button type ="button" class="collapsible">Type of Plot</button>
               <div class="content">
                 <br><input type="radio" name="plot_type" value="1" checked> Temperature Distribution <br>
-                <input type="radio" name="plot_type" value="2"> Effect on temperature calculation
-                at md: <input type="text" id="plot_md" name="plot_md" value="{{ plot_md|safe }}"> from 0 (surface) to 1 (bottom) <br>
-                <input type="radio" name="plot_type" value="3"> Effect on Heat Source Terms <br>
                 <input type="radio" name="plot_type" value="4"> Temperature Behavior <br>
                 <input type="radio" name="plot_type" value="5"> T. Distributions
-                each: <input type="text" id="deltat" name="deltat" value="{{ deltat|safe }}"> hours <br>
                 &emsp;&emsp;<input type="checkbox" name="dt_tdsi" value="True" checked> Fluid inside the drill string<br>
                 &emsp;&emsp;<input type="checkbox" name="dt_ta" value="True"> Fluid inside the annulus<br>
                 &emsp;&emsp;<input type="checkbox" name="dt_tr" value="True"> Riser wall<br>
