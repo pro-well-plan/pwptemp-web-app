@@ -224,7 +224,7 @@ def create_figure1(temp, sr=False):
         p.line(temp.tsr, md, line_color='salmon', ls='-', marker='', legend_label='Surrounding Space')
 
     p.xaxis.axis_label = 'Temperature, °C'
-    p.yaxis.axis_label = 'Depth, m'
+    p.yaxis.axis_label = 'MD, m'
     p.title.text = 'Temperature Profile at %1.1f hours' % temp.time
     p.y_range.flipped = True  # reversing y axis
     p.toolbar.active_drag = None  # disable drag by default

@@ -3,7 +3,6 @@ from drilling import *
 from production import *
 from bokeh.embed import components
 from bokeh.resources import INLINE
-from bokeh.util.string import encode_utf8
 
 app = Flask(__name__)
 app.secret_key = 'random secret'
@@ -17,6 +16,18 @@ def home():
 @app.route("/contributors")
 def contributors():
     return render_template("contributors.html")
+
+
+def encode_utf8(u):
+    """
+    Encode a UTF-8 string to a sequence of bytes.
+    :param u: the string to encode
+    :return: bytes
+    """
+    import sys
+    if sys.version_info[0] == 2:
+        u = u.encode('utf-8')
+    return u
 
 
 @app.route("/production")

@@ -61,7 +61,7 @@ def define_prod_plot():
         sod = 2000
         eod = 2600
         plot_type = 1
-        dt_tft= True
+        dt_tft = True
         dt_ta = False
         dt_tr = False
         dt_tc = False
@@ -206,7 +206,7 @@ def create_figure1(temp, sr=False):
         p.line(temp.tsr, md, line_color='salmon', ls='-', marker='', legend_label='Surrounding Space')
 
     p.xaxis.axis_label = 'Temperature, °C'
-    p.yaxis.axis_label = 'Depth, m'
+    p.yaxis.axis_label = 'MD, m'
     p.title.text = 'Temperature Profile at %1.1f hours' % temp.time
     p.y_range.flipped = True  # reversing y axis
     p.toolbar.active_drag = None  # disable drag by default
@@ -217,7 +217,8 @@ def create_figure4(behavior):
     p = figure(sizing_mode='stretch_both')
     time = int(behavior.finaltime)
     p.line(range(time), behavior.tout, line_color='red', legend_label='Outlet (Tubing)')  # Temp. outlet vs Time
-    p.line(range(time), [behavior.tfm[-1]] * len(behavior.tout), line_color='black', legend_label='Formation')  # Formation Temp. vs Time
+    # Formation Temp. vs Time
+    p.line(range(time), [behavior.tfm[-1]] * len(behavior.tout), line_color='black', legend_label='Formation')
     p.xaxis.axis_label = 'Time, h'
     p.yaxis.axis_label = 'Temperature, °C'
     p.title.text = 'Temperature behavior (%1.1f hours)' % behavior.finaltime
