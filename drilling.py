@@ -1,12 +1,11 @@
 from bokeh.plotting import figure
 from bokeh.layouts import row
-from flask import request
-from main import error_messages
+from flask import request, flash
 from pwptemp.wellpath import get
 import pwptemp.drilling as ptd
 
 
-def define_plot():
+def define_drill_plot():
     time = request.args.get("time")
     depth = request.args.get("depth")
     wd = request.args.get("wd")
@@ -37,7 +36,6 @@ def define_plot():
     tin = request.args.get("tin")
     q = request.args.get("q")
     rpm = request.args.get("rpm")
-    t = request.args.get("t")
     tbit = request.args.get("tbit")
     wob = request.args.get("wob")
     rop = request.args.get("rop")
@@ -199,7 +197,7 @@ def define_plot():
 def plot_wellpath(wellpath):
     p = figure(sizing_mode='stretch_both')
     p.line(wellpath.north, wellpath.tvd, line_color='blue')
-    p.xaxis.axis_label = 'Horizontal Displacement, m'
+    p.xaxis.axis_label = 'North, m'
     p.yaxis.axis_label = 'TVD, m'
     p.title.text = 'Well Profile'
     p.y_range.flipped = True  # reversing y axis
@@ -236,12 +234,12 @@ def create_figure1(temp, sr=False):
 def create_figure4(behavior):
     p = figure(sizing_mode='stretch_both')
     time = int(behavior.finaltime)
-    p.line(range(time), behavior.tbot, line_color='blue', legend_label='Bottom')  # Temp. inside Annulus vs Time
+    p.line(range(time), behavior.tbot, line_color='blue', legend_label='Bottom')  # Temp. outlet vs Time
     p.line(range(time), behavior.tout, line_color='red', legend_label='Outlet (Annular)')  # Temp. inside Annulus vs Time
     p.line(range(time), [behavior.tfm[-1]] * len(behavior.tbot), line_color='black', legend_label='Formation')  # Formation Temp. vs Time
     p.xaxis.axis_label = 'Time, h'
     p.yaxis.axis_label = 'Temperature, °C'
-    p.title.text = 'Temperature behavior before stabilization (%1.1f hours)' % behavior.finaltime
+    p.title.text = 'Temperature behavior (%1.1f hours)' % behavior.finaltime
     p.toolbar.active_drag = None  # disable drag by default
     return p
 
@@ -256,10 +254,10 @@ def create_figure5(temp, tdsi=True, ta=False, tr=False, tcsg=False, tfm=True, ts
     csg = temp.csgs_reach
     color = ['red', 'blue', 'green', 'orange', 'olive', 'powderblue', 'salmon', 'goldenrod', 'chocolate']
     if tfm:
-        p.line(values[0].tfm, md, line_color='black', legend_label='Formation - Initial')  # Temp. due to gradient vs Depth
+        p.line(temp.tfm, md, line_color='black', legend_label='Formation - Initial')  # Temp. due to gradient vs Depth
     if len(values) > len(color):
-        color = color * round((len(temp.values) / len(color)))
-    for x in range(len(temp.values)):
+        color = color * round((len(values) / len(color)))
+    for x in range(len(values)):
         # Plotting Temperature PROFILE
         if tdsi:
             p.line(values[x].tdsi, md, line_color=color[x], legend_label='Fluid in Drill String at %1.1f hours' % times[x])
@@ -280,3 +278,56 @@ def create_figure5(temp, tdsi=True, ta=False, tr=False, tcsg=False, tfm=True, ts
     p.y_range.flipped = True  # reversing y axis
     p.toolbar.active_drag = None  # disable drag by default
     return p
+
+
+def error_messages(inputs):
+
+    error_raised = 0
+    if inputs['wd'] > inputs['depth']:
+        flash('water depth is higher than the total depth', 'danger')
+        error_raised = 1
+
+    if inputs['well_profile'] == "J" or inputs['well_profile'] == "H1":
+
+        if inputs['kop'] > inputs['depth']:
+            flash('kop is higher than the total depth', 'danger')
+            error_raised = 1
+
+        if inputs['eob'] > inputs['depth']:
+            flash('eob is higher than the total depth', 'danger')
+            error_raised = 1
+
+        if inputs['eob'] < inputs['kop']:
+            flash('eob must be deeper than kop', 'danger')
+            error_raised = 1
+
+    if inputs['well_profile'] == "S":
+
+        if inputs['sod'] > inputs['depth']:
+            flash('sod is higher than the total depth', 'danger')
+            error_raised = 1
+
+        if inputs['eod'] > inputs['depth']:
+            flash('eod is higher than the total depth', 'danger')
+            error_raised = 1
+
+        if inputs['eod'] < inputs['sod']:
+            flash('eob2 must be deeper than kop2', 'danger')
+            error_raised = 1
+
+    if inputs['well_profile'] == "H2":
+
+        if inputs['kop2'] > inputs['depth']:
+            flash('kop2 is higher than the total depth', 'danger')
+            error_raised = 1
+
+        if inputs['eob2'] > inputs['depth']:
+            flash('eob2 is higher than the total depth', 'danger')
+            error_raised = 1
+
+        if inputs['eob2'] < inputs['kop2']:
+            flash('eob2 must be deeper than kop2', 'danger')
+            error_raised = 1
+
+    return error_raised
+

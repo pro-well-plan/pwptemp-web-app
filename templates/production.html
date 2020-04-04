@@ -4,6 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    {{ js_resources|indent(4)|safe }}
+    {{ css_resources|indent(4)|safe }}
+    {{ plot_script|indent(4)|safe }}
 </head>
 
 <body>
@@ -17,11 +20,183 @@
 
           <h1>pwptemp for production</h1>
           <hr>
-          <p>In this section will be possible to generate the well temperature distribution for a production operation.
-              This section is still under development</p>
-          <p>For further information contact juan@prowellplan.com</p><br>
-    </div>
+          <p>In this section you can generate the well temperature distribution for a production operation. Set the
+              inputs and click the 'Run' button</p>
 
+          <form action="/production">
+
+            <div class="form-group">
+              <label>Production Time (h)</label>
+              <input type="number" id="time" name="time" step=".0001" value="{{ time|safe }}">
+            </div>
+
+            <div class="form-group">
+              <label>Total Depth (m)</label>
+              <input type="number" id="depth" name="depth" placeholder="Depth" step=".0001" value="{{ depth|safe }}">
+            </div>
+
+            <div class="form-group">
+              <label>Tubing:</label>
+              - od (in): <input name="dto" type="number" step=".0001" value="{{ dto|safe }}">
+                  - id (in): <input name="dti" type="number" step=".0001" value="{{ dti|safe }}">
+            </div>
+
+            <div class="form-group">
+              <label>Water Depth (m)</label>
+              <input type="number" id="wd" name="wd" placeholder="Water depth" step=".0001" value="{{ wd|safe }}"> <br><br>
+              <label>&emsp;&emsp;Riser:</label>
+              - od (in): <input name="dro" type="number" step=".0001" value="{{ dro|safe }}">
+                  - id (in): <input name="dri" type="number" step=".0001" value="{{ dri|safe }}"> <br><br>
+              <label>&emsp;&emsp;Seawater thermal gradient (°C/m):</label> <input name="wtg" type="number" step=".0001" value="{{ wtg|safe }}"> <br><br>
+              <label>Geothermal gradient (°C/m):</label> <input name="gt" type="number" step=".0001" value="{{ gt|safe }}">
+            </div>
+
+            <div class="form-group">
+                <label>Casings</label>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+                <script>
+                function add_inputboxes() {
+                  n = $('#my_input').val();
+                  if (n < 1)
+                    alert("ERROR: Enter a positive number");
+                  else {
+                    $("#rolonum").html('');
+                    $("#rolonum").append('<br>')
+                    for (var i = 1; i <= n; i++) {
+                      $("#rolonum").append('<p>&emsp;&emsp;<span>casing ' + i + ': </span> - od (in): <input name="od' + i + '" type="number" step=".0001" value="" required/> - id (in): <input name="id' + i + '" type="number" step=".0001" value="" required/> - depth (m): <input name="depth' + i + '" type="number" step=".0001" value="" required/></p>');
+                    }
+                  }
+                }
+                </script>
+
+                <input id="my_input" name="n_casings" type="number" value="{{ n_casings|safe }}">
+
+                <button data-toggle="modal" data-target="#myModal" id="add_input1" name="" type="button" onclick="add_inputboxes()">Add</button>
+
+                <div id="rolonum"></div>
+
+                <br><br>
+            </div>
+
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <style>
+            .collapsible {
+              background-color: #777;
+              color: white;
+              cursor: pointer;
+              padting: 12px;
+              width: 100%;
+              border: 1px solid #ccc;
+              text-align: left;
+              outline: none;
+            }
+
+            .active, .collapsible:hover {
+              background-color: #555;
+            }
+
+            .collapsible:after {
+              content: '\002B';
+              color: white;
+              font-weight: bold;
+              float: right;
+              margin-left: 5px;
+            }
+
+            .active:after {
+              content: "\2212";
+            }
+
+            .content {
+              padting: 0 18px;
+              max-height: 0;
+              overflow: hidden;
+              transition: max-height 0.2s ease-out;
+              background-color: #f1f1f1;
+              border: 1px solid #ccc
+            }
+            </style>
+
+            <div class="form-group">
+              <button type ="button" class="collapsible">Well Profile</button>
+              <div class="content">
+                  <br><input type="radio" name="well_profile" value="V"> Vertical &nbsp;&nbsp;
+                  <input type="radio" name="well_profile" value="J" checked> J-type &nbsp;&nbsp;
+                  <input type="radio" name="well_profile" value="S"> S-type &nbsp;&nbsp;
+                  <input type="radio" name="well_profile" value="H1"> Horizontal single-curve &nbsp;&nbsp;
+                  <input type="radio" name="well_profile" value="H2"> Horizontal double-curve<br><br>
+                  kick-off point (kop, m): <input type="number" id="kop" name="kop" step=".0001" value="{{ kop|safe }}"> &nbsp;&nbsp;
+                  end of build (eob, m): <input type="number" id="eob" name="eob" step=".0001" value="{{ eob|safe }}"> <br><br>
+                  build angle (°): <input type="number" id="build_angle" name="build_angle" step=".0001" value="{{ build_angle|safe }}"><br><br>
+                  kick-off point 2 (kop2, m): <input type="number" id="kop2" name="kop2" step=".0001" value="{{ kop2|safe }}"> &nbsp;&nbsp;
+                  end of build 2 (eob2, m): <input type="number" id="eob2" name="eob2" step=".0001" value="{{ eob2|safe }}"><br><br>
+                  start of drop (sod, m): <input type="number" id="sod" name="sod" step=".0001" value="{{ sod|safe }}"> &nbsp;&nbsp;
+                  end of drop (eod, m): <input type="number" id="eod" name="eod" step=".0001" value="{{ eod|safe }}"> <br><br>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button type ="button" class="collapsible">Operational Parameters</button>
+              <div class="content">
+                  <br>
+                  production rate (lpm): <input type="number" id="q" name="q" step=".0001" value="{{ q|safe }}"> <br><br>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button type ="button" class="collapsible">Densities</button>
+              <div class="content">
+                  <br>
+                  fluid density (sg): <input type="number" id="rhof" name="rhof" step=".0001" value="{{ rhof|safe }}"> &nbsp;&nbsp;
+                  tubing density (sg): <input type="number" id="rhot" name="rhot" step=".0001" value="{{ rhot|safe }}"> <br><br>
+                  casing density (sg): <input type="number" id="rhoc" name="rhoc" step=".0001" value="{{ rhoc|safe }}"> &nbsp;&nbsp;
+                  riser density (sg): <input type="number" id="rhor" name="rhor" step=".0001" value="{{ rhor|safe }}"> <br><br>
+                  formation density (sg): <input type="number" id="rhofm" name="rhofm" step=".0001" value="{{ rhofm|safe }}"> &nbsp;&nbsp;
+                  seawater density (sg): <input type="number" id="rhow" name="rhow" step=".0001" value="{{ rhow|safe }}"> <br><br>
+                  cement density (sg): <input type="number" id="rhocem" name="rhocem" step=".0001" value="{{ rhocem|safe }}"> <br><br>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <button type ="button" class="collapsible">Type of Plot</button>
+              <div class="content">
+                <br><input type="radio" name="plot_type" value="1" checked> Temperature Distribution <br>
+                <input type="radio" name="plot_type" value="4"> Temperature Behavior <br>
+                <input type="radio" name="plot_type" value="5"> T. Distributions <br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tft" value="True" checked> Fluid inside the tubing<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_ta" value="True"> Fluid inside the annulus<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tr" value="True"> Riser wall<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tc" value="True"> Casing wall<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tfm" value="True" checked> Formation (Initial)<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tsr" value="True"> Surrounding Space<br><br>
+              </div>
+            </div>
+
+            <script>
+                  var coll = document.getElementsByClassName("collapsible");
+                  var i;
+
+                  for (i = 0; i < coll.length; i++) {
+                    coll[i].addEventListener("click", function() {
+                      this.classList.toggle("active");
+                      var content = this.nextElementSibling;
+                      if (content.style.maxHeight){
+                        content.style.maxHeight = null;
+                      } else {
+                        content.style.maxHeight = content.scrollHeight + "px";
+                      }
+                    });
+                  }
+              </script>
+            <input type="submit" value="Run"> <br><br>
+
+          </form>
+
+        {{ plot_div|indent(4)|safe }} <br><br>
+
+        <p>For further information contact juan@prowellplan.com</p><br>
+
+    </div>
 
 </body>
 
