@@ -252,7 +252,10 @@ def create_figure5(temp, tdsi=True, ta=False, tr=False, tcsg=False, tfm=True, ts
     md = temp.md
     riser = temp.riser
     csg = temp.csgs_reach
-    color = ['red', 'blue', 'green', 'orange', 'olive', 'powderblue', 'salmon', 'goldenrod', 'chocolate']
+    base = ['red', 'blue', 'green', 'orange', 'olive', 'powderblue', 'salmon', 'goldenrod', 'chocolate', 'cadetblue']
+    color = []
+    for i in range(round(temp.time / 10) + 1):
+        color += base
     if tfm:
         p.line(temp.tfm, md, line_color='black', legend_label='Formation - Initial')  # Temp. due to gradient vs Depth
     if len(values) > len(color):
@@ -275,6 +278,7 @@ def create_figure5(temp, tdsi=True, ta=False, tr=False, tcsg=False, tfm=True, ts
     p.xaxis.axis_label = 'Temperature, °C'
     p.yaxis.axis_label = 'Depth, m'
     p.title.text = 'Temperature Profiles'
+    p.legend.click_policy = "hide"
     p.y_range.flipped = True  # reversing y axis
     p.toolbar.active_drag = None  # disable drag by default
     return p
