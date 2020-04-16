@@ -230,11 +230,20 @@ def create_figure5(temp, tft=True, ta=False, tr=False, tc=False, tfm=True, tsr=F
     values = temp.temp_log
     times = [x for x in temp.time_log]
 
+    if temp.time > 5:
+        first_quarter = int(len(values) / 3)
+        second_quarter = int(len(values) / 3) * 2
+        values = [values[0], values[first_quarter], values[second_quarter], values[-1]]
+        times = [times[0], times[first_quarter], times[second_quarter], times[-1]]
+
     p = figure(sizing_mode='stretch_both')
     md = temp.md
     riser = temp.riser
     csg = temp.csgs_reach
-    color = ['red', 'blue', 'green', 'orange', 'olive', 'powderblue', 'salmon', 'goldenrod', 'chocolate']
+    base = ['red', 'blue', 'green', 'orange', 'olive', 'powderblue', 'salmon', 'goldenrod', 'chocolate', 'cadetblue']
+    color = []
+    for i in range(2):
+        color += base
     if tfm:
         p.line(temp.tfm, md, line_color='black', legend_label='Formation - Initial')  # Temp. due to gradient vs Depth
     if len(values) > len(color):
@@ -244,16 +253,16 @@ def create_figure5(temp, tft=True, ta=False, tr=False, tc=False, tfm=True, tsr=F
         if tft:
             p.line(values[x].tft, md, line_color=color[x], legend_label='Fluid in Tubing at %1.1f hours' % times[x])
         if ta:
-            p.line(values[x].ta, md, line_color=color[x], legend_label='Fluid in Annulus at %1.1f hours' % times[x])
+            p.line(values[x].ta, md, line_color=color[x+len(values)], legend_label='Fluid in Annulus at %1.1f hours' % times[x])
         if riser > 0 and tr:
             tr = [i for i in values[x].tr if i]
-            p.line(tr, md, line_color=color[x], legend_label='Riser at %1.1f hours' % times[x])
+            p.line(tr, md, line_color=color[x+len(values)*2], legend_label='Riser at %1.1f hours' % times[x])
         if csg > 0 and tc:
             tcsg_list = [i for i in values[x].tc if i]
-            p.line(tcsg_list, md, line_color=color[x], legend_label='Casing at %1.1f hours' % times[x])
+            p.line(tcsg_list, md, line_color=color[x+len(values)*2], legend_label='Casing at %1.1f hours' % times[x])
         if tsr:
             # Temp. due to gradient vs Depth
-            p.line(values[x].tsr, md, line_color=color[x], legen_label='Surrounding Space')
+            p.line(values[x].tsr, md, line_color=color[x], legend_label='Surrounding Space')
     p.xaxis.axis_label = 'Temperature, °C'
     p.yaxis.axis_label = 'Depth, m'
     p.title.text = 'Temperature Profiles'
