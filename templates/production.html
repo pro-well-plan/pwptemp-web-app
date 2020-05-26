@@ -27,28 +27,28 @@
 
             <div class="form-group">
               <label>Production Time (h)</label>
-              <input type="number" id="time" name="time" step=".0001" value="{{ time|safe }}">
+              <input type="number" id="time" name="time" step="1" value="{{ time|safe }}">
             </div>
 
             <div class="form-group">
               <label>Total Depth (m)</label>
-              <input type="number" id="depth" name="depth" placeholder="Depth" step=".0001" value="{{ depth|safe }}">
+              <input type="number" id="depth" name="depth" placeholder="Depth" step="100" value="{{ depth|safe }}">
             </div>
 
             <div class="form-group">
               <label>Tubing:</label>
-              - od (in): <input name="dto" type="number" step=".0001" value="{{ dto|safe }}">
-                  - id (in): <input name="dti" type="number" step=".0001" value="{{ dti|safe }}">
+              - od (in): <input name="dto" type="number" step=".1" value="{{ dto|safe }}">
+                  - id (in): <input name="dti" type="number" step=".1" value="{{ dti|safe }}">
             </div>
 
             <div class="form-group">
               <label>Water Depth (m)</label>
-              <input type="number" id="wd" name="wd" placeholder="Water depth" step=".0001" value="{{ wd|safe }}"> <br><br>
+              <input type="number" id="wd" name="wd" placeholder="Water depth" step="10" value="{{ wd|safe }}"> <br><br>
               <label>&emsp;&emsp;Riser:</label>
-              - od (in): <input name="dro" type="number" step=".0001" value="{{ dro|safe }}">
-                  - id (in): <input name="dri" type="number" step=".0001" value="{{ dri|safe }}"> <br><br>
-              <label>&emsp;&emsp;Seawater thermal gradient (°C/m):</label> <input name="wtg" type="number" step=".0001" value="{{ wtg|safe }}"> <br><br>
-              <label>Geothermal gradient (°C/m):</label> <input name="gt" type="number" step=".0001" value="{{ gt|safe }}">
+              - od (in): <input name="dro" type="number" step=".1" value="{{ dro|safe }}">
+                  - id (in): <input name="dri" type="number" step=".1" value="{{ dri|safe }}"> <br><br>
+              <label>&emsp;&emsp;Seawater thermal gradient (°C/m):</label> <input name="wtg" type="number" step=".001" value="{{ wtg|safe }}"> <br><br>
+              <label>Geothermal gradient (°C/m):</label> <input name="gt" type="number" step=".001" value="{{ gt|safe }}">
             </div>
 
             <div class="form-group">
@@ -63,7 +63,7 @@
                     $("#rolonum").html('');
                     $("#rolonum").append('<br>')
                     for (var i = 1; i <= n; i++) {
-                      $("#rolonum").append('<p>&emsp;&emsp;<span>casing ' + i + ': </span> - od (in): <input name="od' + i + '" type="number" step=".0001" value="" required/> - id (in): <input name="id' + i + '" type="number" step=".0001" value="" required/> - depth (m): <input name="depth' + i + '" type="number" step=".0001" value="" required/></p>');
+                      $("#rolonum").append('<p>&emsp;&emsp;<span>casing ' + i + ': </span> - od (in): <input name="od' + i + '" type="number" step=".1" value="" required/> - id (in): <input name="id' + i + '" type="number" step=".1" value="" required/> - depth (m): <input name="depth' + i + '" type="number" step="10" value="" required/></p>');
                     }
                   }
                 }
@@ -125,13 +125,13 @@
                   <input type="radio" name="well_profile" value="S"> S-type &nbsp;&nbsp;
                   <input type="radio" name="well_profile" value="H1"> Horizontal single-curve &nbsp;&nbsp;
                   <input type="radio" name="well_profile" value="H2"> Horizontal double-curve<br><br>
-                  kick-off point (kop, m): <input type="number" id="kop" name="kop" step=".0001" value="{{ kop|safe }}"> &nbsp;&nbsp;
-                  end of build (eob, m): <input type="number" id="eob" name="eob" step=".0001" value="{{ eob|safe }}"> <br><br>
-                  build angle (°): <input type="number" id="build_angle" name="build_angle" step=".0001" value="{{ build_angle|safe }}"><br><br>
-                  kick-off point 2 (kop2, m): <input type="number" id="kop2" name="kop2" step=".0001" value="{{ kop2|safe }}"> &nbsp;&nbsp;
-                  end of build 2 (eob2, m): <input type="number" id="eob2" name="eob2" step=".0001" value="{{ eob2|safe }}"><br><br>
-                  start of drop (sod, m): <input type="number" id="sod" name="sod" step=".0001" value="{{ sod|safe }}"> &nbsp;&nbsp;
-                  end of drop (eod, m): <input type="number" id="eod" name="eod" step=".0001" value="{{ eod|safe }}"> <br><br>
+                  kick-off point (kop, m): <input type="number" id="kop" name="kop" step="1" value="{{ kop|safe }}"> &nbsp;&nbsp;
+                  end of build (eob, m): <input type="number" id="eob" name="eob" step="1" value="{{ eob|safe }}"> <br><br>
+                  build angle (°): <input type="number" id="build_angle" name="build_angle" step="1" value="{{ build_angle|safe }}"><br><br>
+                  kick-off point 2 (kop2, m): <input type="number" id="kop2" name="kop2" step="1" value="{{ kop2|safe }}"> &nbsp;&nbsp;
+                  end of build 2 (eob2, m): <input type="number" id="eob2" name="eob2" step="1" value="{{ eob2|safe }}"><br><br>
+                  start of drop (sod, m): <input type="number" id="sod" name="sod" step="1" value="{{ sod|safe }}"> &nbsp;&nbsp;
+                  end of drop (eod, m): <input type="number" id="eod" name="eod" step="1" value="{{ eod|safe }}"> <br><br>
               </div>
             </div>
 
@@ -139,7 +139,7 @@
               <button type ="button" class="collapsible">Operational Parameters</button>
               <div class="content">
                   <br>
-                  production rate (lpm): <input type="number" id="q" name="q" step=".0001" value="{{ q|safe }}"> <br><br>
+                  production rate (m3/d): <input type="number" id="q" name="q" step="100" value="{{ q|safe }}"> <br><br>
               </div>
             </div>
 
@@ -147,13 +147,13 @@
               <button type ="button" class="collapsible">Densities</button>
               <div class="content">
                   <br>
-                  fluid density (sg): <input type="number" id="rhof" name="rhof" step=".0001" value="{{ rhof|safe }}"> &nbsp;&nbsp;
-                  tubing density (sg): <input type="number" id="rhot" name="rhot" step=".0001" value="{{ rhot|safe }}"> <br><br>
-                  casing density (sg): <input type="number" id="rhoc" name="rhoc" step=".0001" value="{{ rhoc|safe }}"> &nbsp;&nbsp;
-                  riser density (sg): <input type="number" id="rhor" name="rhor" step=".0001" value="{{ rhor|safe }}"> <br><br>
-                  formation density (sg): <input type="number" id="rhofm" name="rhofm" step=".0001" value="{{ rhofm|safe }}"> &nbsp;&nbsp;
-                  seawater density (sg): <input type="number" id="rhow" name="rhow" step=".0001" value="{{ rhow|safe }}"> <br><br>
-                  cement density (sg): <input type="number" id="rhocem" name="rhocem" step=".0001" value="{{ rhocem|safe }}"> <br><br>
+                  fluid density (sg): <input type="number" id="rhof" name="rhof" step=".1" value="{{ rhof|safe }}"> &nbsp;&nbsp;
+                  tubing density (sg): <input type="number" id="rhot" name="rhot" step=".1" value="{{ rhot|safe }}"> <br><br>
+                  casing density (sg): <input type="number" id="rhoc" name="rhoc" step=".1" value="{{ rhoc|safe }}"> &nbsp;&nbsp;
+                  riser density (sg): <input type="number" id="rhor" name="rhor" step=".1" value="{{ rhor|safe }}"> <br><br>
+                  formation density (sg): <input type="number" id="rhofm" name="rhofm" step=".1" value="{{ rhofm|safe }}"> &nbsp;&nbsp;
+                  seawater density (sg): <input type="number" id="rhow" name="rhow" step=".1" value="{{ rhow|safe }}"> <br><br>
+                  cement density (sg): <input type="number" id="rhocem" name="rhocem" step=".1" value="{{ rhocem|safe }}"> <br><br>
               </div>
             </div>
 

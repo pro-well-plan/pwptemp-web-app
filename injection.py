@@ -3,10 +3,10 @@ from bokeh.layouts import row
 from flask import request, flash
 from main import error_messages
 from pwptemp.wellpath import get
-import pwptemp.production as ptp
+import pwptemp.injection as pti
 
 
-def define_prod_plot():
+def define_inj_plot():
     time = request.args.get("time")
     depth = request.args.get("depth")
     wd = request.args.get("wd")
@@ -34,6 +34,7 @@ def define_prod_plot():
     dti = request.args.get("dti")
 
     # OPERATIONAL PARAMETERS
+    tin = request.args.get("tin")
     q = request.args.get("q")
 
     # DENSITIES
@@ -77,10 +78,11 @@ def define_prod_plot():
         dti = 4
 
         # OPERATIONAL PARAMETERS
-        q = 2000        # production rate, 2000 m3/d
+        tin = 20
+        q = 144         # injection rate, m3/d
 
         # DENSITIES
-        rhof = 0.85         # production fluid density, sg
+        rhof = 1.198        # injection fluid density, sg
         rhot = 7.6
         rhoc = 7.8
         rhor = 7.8
@@ -124,6 +126,7 @@ def define_prod_plot():
         dti = float(dti)
 
         # OPERATIONAL PARAMETERS
+        tin = float(tin)
         q = float(q)
 
         # DENSITIES
@@ -143,8 +146,8 @@ def define_prod_plot():
               'n_casings': n_casings}
 
     # Others parameters: the ones which should be used for the attribute 'change_inputs'
-    others = {'wd': wd, 'q': q, 'rhof': rhof, 'rhot': rhot, 'rhoc': rhoc, 'rhor': rhor, 'rhofm': rhofm, 'rhow': rhow,
-              'rhocem': rhocem, 'dro': dro, 'dri': dri, 'dto': dto, 'dti': dti, 'wtg': wtg, 'gt': gt}
+    others = {'wd': wd, 'q': q, 'tin': tin, 'rhof': rhof, 'rhot': rhot, 'rhoc': rhoc, 'rhor': rhor, 'rhofm': rhofm,
+              'rhow': rhow, 'rhocem': rhocem, 'dro': dro, 'dri': dri, 'dto': dto, 'dti': dti, 'wtg': wtg, 'gt': gt}
 
     inputs.update(others)  # Merge 'others' into the 'inputs' dictionary
 
@@ -152,7 +155,7 @@ def define_prod_plot():
 
     if error_raised == 0:
         if plot_type != 5:
-            temp = ptp.temp(time, mdt=depth, casings=casings_list, profile=well_profile, change_input=others,
+            temp = pti.temp(time, mdt=depth, casings=casings_list, profile=well_profile, change_input=others,
                             build_angle=build_angle, kop=kop, eob=eob, kop2=kop2, eob2=eob2, sod=sod, eod=eod)
 
         if plot_type == 1:
@@ -160,7 +163,7 @@ def define_prod_plot():
         if plot_type == 4:
             fig1 = create_figure4(temp.behavior())
         if plot_type == 5:
-            temp = ptp.temp(time, mdt=depth, log=True, profile=well_profile, change_input=others,
+            temp = pti.temp(time, mdt=depth, log=True, profile=well_profile, change_input=others,
                               build_angle=build_angle, kop=kop, eob=eob, kop2=kop2, eob2=eob2, sod=sod, eod=eod)
             fig1 = create_figure5(temp, tft=dt_tft, ta=dt_ta, tr=dt_tr, tc=dt_tc, tfm=dt_tfm, tsr=dt_tsr)
 

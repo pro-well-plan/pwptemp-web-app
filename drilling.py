@@ -54,7 +54,7 @@ def define_drill_plot():
     gt = request.args.get("gt")
 
     if time is None:
-        time = 5
+        time = 2
         depth = 3000
         wd = 150
         well_profile = "V"

@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from drilling import *
 from production import *
+from injection import *
 from bokeh.embed import components
 from bokeh.resources import INLINE
 
@@ -71,6 +72,28 @@ def drilling():
                            rhor=inputs['rhor'], rhofm=inputs['rhofm'], rhow=inputs['rhow'], rhocem=inputs['rhocem'],
                            n_casings=inputs['n_casings'], dro=inputs['dro'], dri=inputs['dri'],
                            ddo=inputs['ddo'], ddi=inputs['ddi'], wtg=inputs['wtg'], gt=inputs['gt'])
+
+    return encode_utf8(html)
+
+
+@app.route("/injection")
+def injection():
+    p, inputs = define_inj_plot()
+
+    # grab the static resources
+    js_resources = INLINE.render_js()
+    css_resources = INLINE.render_css()
+
+    # Embed plot into HTML via Flask Render
+    script, div = components(p)
+    html = render_template('injection.html', plot_script=script, plot_div=div, js_resources=js_resources,
+                           css_resources=css_resources, time=inputs['time'], depth=inputs['depth'], wd=inputs['wd'],
+                           kop=inputs['kop'], eob=inputs['eob'], build_angle=inputs['build_angle'], kop2=inputs['kop2'],
+                           eob2=inputs['eob2'], sod=inputs['sod'], eod=inputs['eod'], q=inputs['q'], tin=inputs['tin'],
+                           rhof=inputs['rhof'], rhot=inputs['rhot'], rhoc=inputs['rhoc'], rhor=inputs['rhor'],
+                           rhofm=inputs['rhofm'], rhow=inputs['rhow'], rhocem=inputs['rhocem'],
+                           n_casings=inputs['n_casings'], dro=inputs['dro'], dri=inputs['dri'],
+                           dto=inputs['dto'], dti=inputs['dti'], wtg=inputs['wtg'], gt=inputs['gt'])
 
     return encode_utf8(html)
 

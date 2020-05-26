@@ -18,15 +18,15 @@
 
     <div class="container" style="text-align: left;">
 
-          <h1>pwptemp for drilling</h1>
+          <h1>pwptemp for injection</h1>
           <hr>
-          <p>In this section you can generate the well temperature distribution for a drilling operation. Set the inputs
-            and click the 'Run' button</p>
+          <p>In this section you can generate the well temperature distribution for a injection operation. Set the
+              inputs and click the 'Run' button</p>
 
-          <form action="/drilling">
+          <form action="/injection">
 
             <div class="form-group">
-              <label>Circulation Time (h)</label>
+              <label>Injection Time (h)</label>
               <input type="number" id="time" name="time" step="1" value="{{ time|safe }}">
             </div>
 
@@ -36,9 +36,9 @@
             </div>
 
             <div class="form-group">
-              <label>Drill String:</label>
-              - od (in): <input name="ddo" type="number" step=".1" value="{{ ddo|safe }}">
-                  - id (in): <input name="ddi" type="number" step=".1" value="{{ ddi|safe }}">
+              <label>Tubing:</label>
+              - od (in): <input name="dto" type="number" step=".1" value="{{ dto|safe }}">
+                  - id (in): <input name="dti" type="number" step=".1" value="{{ dti|safe }}">
             </div>
 
             <div class="form-group">
@@ -84,7 +84,7 @@
               background-color: #777;
               color: white;
               cursor: pointer;
-              padding: 12px;
+              padting: 12px;
               width: 100%;
               border: 1px solid #ccc;
               text-align: left;
@@ -108,7 +108,7 @@
             }
 
             .content {
-              padding: 0 18px;
+              padting: 0 18px;
               max-height: 0;
               overflow: hidden;
               transition: max-height 0.2s ease-out;
@@ -139,13 +139,8 @@
               <button type ="button" class="collapsible">Operational Parameters</button>
               <div class="content">
                   <br>
-                  fluid inlet temperature (°C): <input type="number" id="tin" name="tin" step="1" value="{{ tin|safe }}"> &nbsp;&nbsp;
-                  circulation rate (lpm): <input type="number" id="q" name="q" step="10" value="{{ q|safe }}"> <br><br>
-                  RPM: <input type="number" id="rpm" name="rpm" step="1" value="{{ rpm|safe }}"> &nbsp;&nbsp
-                  torque on the bit (kN*m): <input type="number" id="tbit" name="tbit" step="1" value="{{ tbit|safe }}"> &nbsp;&nbsp;
-                  weight on bit (kN): <input type="number" id="wob" name="wob" step="1" value="{{ wob|safe }}"> <br><br>
-                  ROP (m/h): <input type="number" id="rop" name="rop" step=".1" value="{{ rop|safe }}"> &nbsp;&nbsp;
-                  area of the nozzles (in2): <input type="number" id="an" name="an" step="100" value="{{ an|safe }}"> <br><br>
+                  fluid inlet temperature (°C): <input type="number" id="tin" name="tin" step="1" value="{{ tin|safe }}"> <br><br>
+                  injection rate (m3/d): <input type="number" id="q" name="q" step="10" value="{{ q|safe }}"> <br><br>
               </div>
             </div>
 
@@ -154,7 +149,7 @@
               <div class="content">
                   <br>
                   fluid density (sg): <input type="number" id="rhof" name="rhof" step=".1" value="{{ rhof|safe }}"> &nbsp;&nbsp;
-                  drill pipe density (sg): <input type="number" id="rhod" name="rhod" step=".1" value="{{ rhod|safe }}"> <br><br>
+                  tubing density (sg): <input type="number" id="rhot" name="rhot" step=".1" value="{{ rhot|safe }}"> <br><br>
                   casing density (sg): <input type="number" id="rhoc" name="rhoc" step=".1" value="{{ rhoc|safe }}"> &nbsp;&nbsp;
                   riser density (sg): <input type="number" id="rhor" name="rhor" step=".1" value="{{ rhor|safe }}"> <br><br>
                   formation density (sg): <input type="number" id="rhofm" name="rhofm" step=".1" value="{{ rhofm|safe }}"> &nbsp;&nbsp;
@@ -169,10 +164,10 @@
                 <br><input type="radio" name="plot_type" value="1" checked> Temperature Distribution <br>
                 <input type="radio" name="plot_type" value="4"> Temperature Behavior <br>
                 <input type="radio" name="plot_type" value="5"> T. Distributions <br>
-                &emsp;&emsp;<input type="checkbox" name="dt_tdsi" value="True" checked> Fluid inside the drill string<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tft" value="True" checked> Fluid inside the tubing<br>
                 &emsp;&emsp;<input type="checkbox" name="dt_ta" value="True"> Fluid inside the annulus<br>
                 &emsp;&emsp;<input type="checkbox" name="dt_tr" value="True"> Riser wall<br>
-                &emsp;&emsp;<input type="checkbox" name="dt_tcsg" value="True"> Casing wall<br>
+                &emsp;&emsp;<input type="checkbox" name="dt_tc" value="True"> Casing wall<br>
                 &emsp;&emsp;<input type="checkbox" name="dt_tfm" value="True" checked> Formation (Initial)<br>
                 &emsp;&emsp;<input type="checkbox" name="dt_tsr" value="True"> Surrounding Space<br><br>
               </div>
